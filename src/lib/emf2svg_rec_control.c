@@ -61,11 +61,8 @@ void U_EMRHEADER_draw(const char *contents, FILE *out, drawingStates *states) {
                      (double)(pEmr->rclBounds.bottom - pEmr->rclBounds.top);
 
 
-// We assume that that it is the indication of Enterprise Architect output:
-// top and bottom points are on the different sides of the X axis
-// this is actually a weak assumption but nothing better came to our minds (
     if (pEmr->rclBounds.top*pEmr->rclBounds.bottom < 0) {
-        states->fixEALayout = true;
+        states->fixBrokenYTransform = true;
     }
 
     if ((states->imgHeight != 0) && (states->imgWidth != 0)) {
@@ -112,7 +109,7 @@ void U_EMRHEADER_draw(const char *contents, FILE *out, drawingStates *states) {
                     states->nameSpace);
         }
 
-        if (states->fixEALayout) {
+        if (states->fixBrokenYTransform) {
             fprintf(out, ">\n");
             fprintf(out, "<%sg transform=\"translate(0.0000, 0.0000)\">\n",
                     states->nameSpaceString);
