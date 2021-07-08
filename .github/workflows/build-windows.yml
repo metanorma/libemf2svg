@@ -24,8 +24,5 @@ jobs:
         nuget install libiconv.lib
         
     - name: Build fontconfig
-      run: |
-        wget https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.94.tar.gz
-        tar xvfz fontconfig-2.13.94.tar.gz
-        cd fontconfig-2.13.94.tar.gz
+      run: vcpkg install fontconfig:x64-windows
  
