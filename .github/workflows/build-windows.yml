@@ -15,9 +15,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2 Windows
+    - uses: actions/checkout@v2
     
-    - name: Install packages
+    - name: Install packages Windows
       run: |
         vcpkg install libpng:x64-windows
         vcpkg install libiconv:x64-windows
