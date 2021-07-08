@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2 Windows
 
     - name: Install packages
       run: |
@@ -23,8 +23,5 @@ jobs:
         vcpkg install libiconv:x64-windows
         vcpkg install freetype:x64-windows
         vcpkg install fontconfig:x64-windows
-        
-        
-    - name: Eager for somethimg new ?
-      run: vcpkg install getopt:x64-windows
+        vcpkg install getopt:x64-windows
  
