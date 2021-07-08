@@ -18,6 +18,8 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install packages
-      run: nuget install libpng_static;freetype_static
+      run: |
+        nuget install libpng_static
+        nuget install freetype_static
 
  
