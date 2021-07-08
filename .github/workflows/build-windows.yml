@@ -19,9 +19,9 @@ jobs:
 
     - name: Install packages
       run: |
-        nuget install libpng_static
-        nuget install freetype_static
-        nuget install libiconv.lib
+        vcpkg install libpng:x64-windows
+        vcpkg install freetype:x64-windows
+        vcpkg install libiconv:x64-windows
         
     - name: Build fontconfig
       run: vcpkg install fontconfig:x64-windows
