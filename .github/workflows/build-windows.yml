@@ -20,9 +20,11 @@ jobs:
     - name: Install packages
       run: |
         vcpkg install libpng:x64-windows
-        vcpkg install freetype:x64-windows
         vcpkg install libiconv:x64-windows
+        vcpkg install freetype:x64-windows
+        vcpkg install fontconfig:x64-windows
         
-    - name: Build fontconfig
-      run: vcpkg install fontconfig:x64-windows
+        
+    - name: Eager for somethimg new ?
+      run: vcpkg install getopt:x64-windows
  
