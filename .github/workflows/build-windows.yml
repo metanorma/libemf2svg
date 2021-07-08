@@ -17,15 +17,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Install packages Windows
-      run: |
-        vcpkg install libpng:x64-windows
-        vcpkg install libiconv:x64-windows
-        vcpkg install freetype:x64-windows
-        vcpkg install fontconfig:x64-windows
-        vcpkg install getopt:x64-windows
+#    - name: Install packages Windows
+#      run: |
+#        vcpkg install libpng:x64-windows
+#        vcpkg install libiconv:x64-windows
+#        vcpkg install freetype:x64-windows
+#        vcpkg install fontconfig:x64-windows
+#        vcpkg install getopt:x64-windows
  
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      run: cmake -B ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake

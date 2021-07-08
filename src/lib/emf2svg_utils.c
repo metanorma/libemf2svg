@@ -11,7 +11,6 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <iconv.h>
 #include <errno.h>
 #include <ft2build.h>
@@ -32,12 +31,14 @@ void U_swap4(void *ul, unsigned int count);
   points.
   \param rect U_RECTL object
   */
+#ifndef _MSC_VER
 double _dsign(double v) {
     if (v >= 0)
         return 1;
     else
         return -1;
 }
+#endif
 
 void arc_circle_draw(const char *contents, FILE *out, drawingStates *states) {
     PU_EMRANGLEARC pEmr = (PU_EMRANGLEARC)(contents);
