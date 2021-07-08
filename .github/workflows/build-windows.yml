@@ -21,5 +21,6 @@ jobs:
       run: |
         nuget install libpng_static
         nuget install freetype_static
+        nuget install libiconv.lib
 
  
