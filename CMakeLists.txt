@@ -83,12 +83,18 @@ LINK_DIRECTORIES(
     /usr/lib/
 )
 
+set(DEPS_UEMF "deps/libUEMF-0.2.5")
+set(DEPS_MEMSTREAM deps/memstream-0.1)
+
+
 # headers directories
 include_directories(
     ./inc/
     ${PNG_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}
     ${FONTCONFIG_INCLUDE_DIR}
+    ./${DEPS_UEMF}/
+    ./${DEPS_MEMSTREAM}/
     /usr/local/include/ 
     /usr/include/ 
     /sw/include/
@@ -99,10 +105,10 @@ add_library(emf2svg
     ${SHARED}
     src/lib/pmf2svg.c
     src/lib/pmf2svg_print.c
-    src/lib/uemf_utf.c
-    src/lib/uemf_endian.c
-    src/lib/uemf.c
-    src/lib/upmf.c
+    ${DEPS_UEMF}/uemf_utf.c
+    ${DEPS_UEMF}/uemf_endian.c
+    ${DEPS_UEMF}/uemf.c
+    ${DEPS_UEMF}/upmf.c
     src/lib/emf2svg_utils.c
     src/lib/emf2svg_img_utils.c
     src/lib/emf2svg_clip_utils.c
