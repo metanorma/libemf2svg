@@ -22,5 +22,10 @@ jobs:
         nuget install libpng_static
         nuget install freetype_static
         nuget install libiconv.lib
-
+        
+    - name: Build fontconfig
+      run: |
+        wget https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.94.tar.gz
+        tar xvfz fontconfig-2.13.94.tar.gz
+        cd fontconfig-2.13.94.tar.gz
  
