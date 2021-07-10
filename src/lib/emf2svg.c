@@ -690,7 +690,7 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
     blimit = contents + length;
     int err = 1;
 
-    stream = NULL; //open_memstream(out, out_length);
+    stream = open_memstream(out, out_length);
     if (stream == NULL) {
         if (states->verbose) {
             printf("Failed to allocate output stream\n");
@@ -749,7 +749,7 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
     FLAG_RESET;
     setTransformIdentity(states);
 
-    // continu only if no previous errors
+    // continue only if no previous errors
     if (err == 0) {
         OK = 0;
     } else {
@@ -798,8 +798,10 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
     freeEmfImageLibrary(states);
     free(states);
 
-    fflush(stream);
-    fclose(stream);
+    if (stream) {
+        fflush(stream);
+        fclose(stream);
+    }
 
     return err;
 }

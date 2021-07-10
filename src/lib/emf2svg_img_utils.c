@@ -41,7 +41,7 @@ float get_pixel_size(uint32_t colortype) {
 
 /* Attempts to save PNG to file; returns 0 on success, non-zero on error. */
 int rgb2png(RGBABitmap *bitmap, char **out, size_t *size) {
-    FILE* fp = NULL; // open_memstream(out, size);
+    FILE* fp = open_memstream(out, size);
     if (fp == NULL) {
         return -1;
     }
@@ -166,7 +166,7 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         return out_img;
     }
 
-    stream = NULL; // open_memstream(&out, &size);
+    stream = open_memstream(&out, &size);
     if (stream == NULL) {
         return out_img;
     }
@@ -313,7 +313,7 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         return out_img;
     }
 
-    stream = NULL;  //open_memstream(&out, &size);
+    stream = open_memstream(&out, &size);
     if (stream == NULL) {
         return out_img;
     }
