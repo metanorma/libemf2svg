@@ -26,7 +26,9 @@
 
 using namespace std;
 
-const char *argp_program_version = E2S_VERSION;
+#define __STRINGIFY__(V) #V
+
+const char *argp_program_version = __STRINGIFY__(E2S_VERSION);
 
 const char *argp_program_bug_address =
     "https://github.com/kakwa/libemf2svg/issues";
@@ -103,7 +105,7 @@ int main(int argc, char *argv[]) {
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
     if (arguments.version) {
-        std::cout << "emf2svg version: " << E2S_VERSION << "\n";
+        std::cout << "emf2svg version: " << __STRINGIFY__(E2S_VERSION) << "\n";
         return 0;
     }
 

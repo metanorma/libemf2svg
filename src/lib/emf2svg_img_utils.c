@@ -41,7 +41,7 @@ float get_pixel_size(uint32_t colortype) {
 
 /* Attempts to save PNG to file; returns 0 on success, non-zero on error. */
 int rgb2png(RGBABitmap *bitmap, char **out, size_t *size) {
-    FILE *fp = open_memstream(out, size);
+    FILE* fp = NULL; // open_memstream(out, size);
     if (fp == NULL) {
         return -1;
     }
@@ -146,8 +146,8 @@ int rgb2png(RGBABitmap *bitmap, char **out, size_t *size) {
 RGBBitmap rle8ToRGB8(RGBBitmap img) {
     FILE *stream;
     bool decode = true;
-    char *out;
-    size_t size;
+    char *out = NULL;
+    size_t size = 0;
 
     RGBBitmap out_img;
     out_img.size = 0;
@@ -166,7 +166,7 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         return out_img;
     }
 
-    stream = open_memstream(&out, &size);
+    stream = NULL; // open_memstream(&out, &size);
     if (stream == NULL) {
         return out_img;
     }
@@ -176,7 +176,7 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         // check against potential overflow
         if ((bm + 2) > end || x > MAX_BMP_WIDTH || y > MAX_BMP_HEIGHT) {
             fclose(stream);
-            free(out);
+            if (out) free(out);
             return out_img;
         };
         switch (bm[0]) {
@@ -238,7 +238,7 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         }
     }
     // pad the rest of the bitmap
-    for (int i = 0; i < (((int)img.width - x) + (int)img.width * y); i++)
+    for (size_t i = 0; i < ((img.width - x) + img.width * y); i++)
         fputc(0x00, stream);
 
     fflush(stream);
@@ -293,8 +293,8 @@ int e2s_get_DIB_params(PU_BITMAPINFO Bmi, const U_RGBQUAD **ct, uint32_t *numCt,
 RGBBitmap rle4ToRGB(RGBBitmap img) {
     FILE *stream;
     bool decode = true;
-    char *out;
-    size_t size;
+    char *out = NULL;
+    size_t size = 0;
 
     RGBBitmap out_img;
     out_img.size = 0;
@@ -313,7 +313,7 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         return out_img;
     }
 
-    stream = open_memstream(&out, &size);
+    stream = NULL;  //open_memstream(&out, &size);
     if (stream == NULL) {
         return out_img;
     }
@@ -335,7 +335,7 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         // check against potential overflow
         if ((bm + 2) > end || x > MAX_BMP_WIDTH || y > MAX_BMP_HEIGHT) {
             fclose(stream);
-            free(out);
+            if (out) free(out);
             return out_img;
         };
         switch (bm[0]) {
@@ -450,7 +450,7 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         fputc(upper | 0x00, stream);
     }
     // end of line, pad the rest of the line with zeros
-    for (int i = 0; i < (((int)img.width - x + (int)img.width * y) / 2); i++)
+    for (size_t i = 0; i < ((img.width - x + img.width * y) / 2); i++)
         fputc(0x00, stream);
 
     fflush(stream);

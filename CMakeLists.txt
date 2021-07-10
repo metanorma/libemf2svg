@@ -1,4 +1,5 @@
 cmake_minimum_required (VERSION 3.12)
+include(ExternalProject)
 
 project (emf2svg)
 
@@ -6,6 +7,7 @@ project (emf2svg)
 set(emf2svg_VERSION_MAJOR 1)
 set(emf2svg_VERSION_MINOR 1)
 set(emf2svg_VERSION_PATCH 0)
+set(emf2svg_VERSION ${emf2svg_VERSION_MAJOR}.${emf2svg_VERSION_MINOR}.${emf2svg_VERSION_PATCH})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
@@ -13,7 +15,11 @@ find_package(PNG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
 
-set(emf2svg_VERSION ${emf2svg_VERSION_MAJOR}.${emf2svg_VERSION_MINOR}.${emf2svg_VERSION_PATCH})
+set(DEPS ${CMAKE_CURRENT_SOURCE_DIR}/deps)
+
+set(DEPS_UEMF ${DEPS}/libUEMF-0.2.5)
+set(DEPS_MEMSTREAM ${DEPS}/memstream-0.1)
+
 
 add_custom_target(tag
     COMMAND git tag -a ${emf2svg_VERSION} -m "tagging version ${emf2svg_VERSION}"
@@ -23,7 +29,8 @@ add_custom_target(tag
 
 # set version as a definition
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DE2S_VERSION='\"${emf2svg_VERSION}\"'")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DE2S_VERSION='\"${emf2svg_VERSION}\"'")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DE2S_VERSION=${emf2svg_VERSION}")
+
 
 # Options
 option(GCOV      "compile with gcov support"    OFF)
@@ -43,7 +50,11 @@ if(INDEX)
 endif(INDEX)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  if(MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od -Zi")
+  else(MSVC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
+  endif(MSVC)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 
@@ -60,7 +71,7 @@ if(UNIX)
   link_libraries(m)
 endif(UNIX)
 
-IF(NOT FORCELE)
+if(NOT FORCELE)
     include(TestBigEndian)
     TEST_BIG_ENDIAN(BIGENDIAN)
     IF(${BIGENDIAN})
@@ -69,36 +80,62 @@ IF(NOT FORCELE)
 endif(NOT FORCELE)
 
 # Build external dependancies if we are on OSX
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    # Mac OS X specific code
    set(EXTERNAL_ICONV "iconv")
    set(EXTERNAL_ARGP "argp")
    add_definitions(-DDARWIN)
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
+# Build external dependancies if it is Microsoft Visual Studio build
+IF(MSVC)
+   find_package(Iconv REQUIRED)
+   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
+
+   ExternalProject_Add(argp-standalone
+     PREFIX ${DEPS}/argp
+     GIT_REPOSITORY https://github.com/tom42/argp-standalone.git
+     INSTALL_COMMAND ""
+   )
+   ExternalProject_Get_property(argp-standalone SOURCE_DIR)
+   set(ARGP_INCLUDE_DIRS ${SOURCE_DIR}/include/argp-standalone)
+   ExternalProject_Get_property(argp-standalone BINARY_DIR)
+   set(EXTERNAL_ARGP ${BINARY_DIR}/src/argp-standalone.lib)
+ENDIF(MSVC)
+
 
 # linking directories
-LINK_DIRECTORIES(
-    ${CMAKE_BINARY_DIR}/
-    /usr/local/lib
-    /usr/lib/
-)
-
-set(DEPS_UEMF "deps/libUEMF-0.2.5")
-set(DEPS_MEMSTREAM deps/memstream-0.1)
+#link_directories(
+#    ${CMAKE_BINARY_DIR}/
+#    /usr/local/lib
+#    /usr/lib/
+#)
 
 
 # headers directories
-include_directories(
-    ./inc/
+if(MSVC)
+  include_directories(
+    ./inc
     ${PNG_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}
-    ${FONTCONFIG_INCLUDE_DIR}
-    ./${DEPS_UEMF}/
-    ./${DEPS_MEMSTREAM}/
-    /usr/local/include/ 
-    /usr/include/ 
-    /sw/include/
-)
+    ${FONTCONFIG_INCLUDE_DIRS}
+    ${ARGP_INCLUDE_DIRS}
+    ${DEPS_UEMF}
+    ${DEPS_MEMSTREAM}
+  )
+else(MSVC)
+  include_directories(
+    ./inc
+    ${PNG_INCLUDE_DIRS}
+    ${FREETYPE_INCLUDE_DIRS}
+    ${FONTCONFIG_INCLUDE_DIRS}
+    ${DEPS_UEMF}
+    ${DEPS_MEMSTREAM}
+    /usr/local/include 
+    /usr/include 
+    /sw/include
+  )
+endif(MSVC)
 
 # Compile the library
 add_library(emf2svg
@@ -109,6 +146,7 @@ add_library(emf2svg
     ${DEPS_UEMF}/uemf_endian.c
     ${DEPS_UEMF}/uemf.c
     ${DEPS_UEMF}/upmf.c
+#    ${DEPS_MEMSTREAM}/memstream.c
     src/lib/emf2svg_utils.c
     src/lib/emf2svg_img_utils.c
     src/lib/emf2svg_clip_utils.c
@@ -137,14 +175,18 @@ add_executable(emf2svg-conv src/conv/emf2svg.cpp)
 target_link_libraries(emf2svg
     ${PNG_LIBRARIES}
     ${EXTERNAL_ICONV}
-    ${EXTERNAL_ARGP}
     ${FREETYPE_LIBRARIES}
     ${FONTCONFIG_LIBRARIES}
 ) 
 
 target_link_libraries(emf2svg-conv
     emf2svg
+    ${EXTERNAL_ARGP}
 )
+
+if(MSVC)
+  add_dependencies(emf2svg-conv argp-standalone)
+endif(MSVC)
 
 if(GCOV)
   Set(COVERAGE_EXCLUDES '*conv*' '*uemf*' '*upmf*' '*tests*' '*c++*')
@@ -165,9 +207,14 @@ if(UNITTEST)
   )
 endif(UNITTEST)
 
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wall")
+if (MSVC)
+# x64: suppress mostly harmless warnings about 64 to 32 bit conversion (4244, 4267).
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std:c++14 -W3 -D_CRT_SECURE_NO_WARNINGS -wd4244 -wd4267 -wd4305")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std:c11 -W3 -D_CRT_SECURE_NO_WARNINGS -wd4244 -wd4267 -wd4305")
+else(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wall")
+endif (MSVC)
 
 if (NOT LIB_INSTALL_DIR)
     set(LIB_INSTALL_DIR lib)

@@ -690,7 +690,7 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
     blimit = contents + length;
     int err = 1;
 
-    stream = open_memstream(out, out_length);
+    stream = NULL; //open_memstream(out, out_length);
     if (stream == NULL) {
         if (states->verbose) {
             printf("Failed to allocate output stream\n");
