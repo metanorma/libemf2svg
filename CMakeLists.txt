@@ -103,16 +103,7 @@ IF(MSVC)
    set(EXTERNAL_ARGP ${BINARY_DIR}/src/argp-standalone.lib)
 ENDIF(MSVC)
 
-
-# linking directories
-link_directories(
-    ${CMAKE_BINARY_DIR}/
-    /usr/local/lib
-    /usr/lib/
-)
-
-
-# headers directories
+# headers & library directories
 if(MSVC)
   include_directories(
     ./inc
@@ -134,6 +125,12 @@ else(MSVC)
     /usr/local/include 
     /usr/include 
     /sw/include
+  )
+
+  link_directories(
+    ${CMAKE_BINARY_DIR}/
+    /usr/local/lib
+    /usr/lib/
   )
 endif(MSVC)
 
