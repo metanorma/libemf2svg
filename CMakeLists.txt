@@ -105,11 +105,11 @@ ENDIF(MSVC)
 
 
 # linking directories
-#link_directories(
-#    ${CMAKE_BINARY_DIR}/
-#    /usr/local/lib
-#    /usr/lib/
-#)
+link_directories(
+    ${CMAKE_BINARY_DIR}/
+    /usr/local/lib
+    /usr/lib/
+)
 
 
 # headers directories
