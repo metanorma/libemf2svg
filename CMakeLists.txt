@@ -1,6 +1,18 @@
 cmake_minimum_required (VERSION 3.12)
 include(ExternalProject)
 
+# Comments re MSVC build
+# - We use vcpkg to install MSVC versions of the following GNU libraries 
+#   and their dependencies:
+#   -- libpng
+#   -- freetype
+#   -- fontconfig
+#   -- iconv
+# - vcpkg is configured as git submodule. Some experts consider it the best prectice a
+# - The list of vcpkg modules is specified at vcpkg.json
+# - With this setup CMake automatically runs vcpkg install for all listed packages 
+#   before the project directive is executed
+
 project (emf2svg)
 
 # Project version (sematic versionning)
@@ -16,7 +28,29 @@ find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
 
 set(DEPS ${CMAKE_CURRENT_SOURCE_DIR}/deps)
+set(EXTERNAL_INCLUDE_DIR ${DEPS}/include)
+set(EXTERNAL_LIB_DIR ${DEPS}/lib)
 
+
+
+ExternalProject_Add(fmem
+  PREFIX ${DEPS}/fmem
+  GIT_REPOSITORY https://github.com/Snaipe/fmem.git
+  GIT_TAG b73b3d8b570c2f79df5a0b071efba392a82ddcd7 
+  UPDATE_COMMAND git restore ${DEPS}/fmem/src/fmem/CMakeLists.txt 
+  PATCH_COMMAND cd ${DEPS}/fmem/src/fmem && git apply ${DEPS}/fmem.patch/CMakeLists.txt.patch || echo patch
+  CMAKE_ARGS -DBUILD_TESTING=FALSE -DCMAKE_INSTALL_PREFIX=${DEPS}
+)
+
+# Comments re fmem setup above
+# The patch fixes https://github.com/Snaipe/fmem/issues/4
+# However, as CMake man explains (https://cmake.org/cmake/help/latest/module/ExternalProject.html)
+# "Note that it can be quite difficult to define an appropriate patch command that performs 
+#  robustly, especially for download methods such as git where changing the GIT_TAG will not 
+#  discard changes from a previous patch, but the patch command will be called again after 
+#  updating to the new tag."
+# So with UPDATE_COMMAND we roll back the patch that may be applied during the previous build
+# in order to ensure that the patch may be applied correctly by PATH_COMMAND
 set(DEPS_UEMF ${DEPS}/libUEMF-0.2.5)
 set(DEPS_MEMSTREAM ${DEPS}/memstream-0.1)
 
@@ -85,22 +119,27 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    set(EXTERNAL_ICONV "iconv")
    set(EXTERNAL_ARGP "argp")
    add_definitions(-DDARWIN)
+
+  # Link directories are required for MacOS GHA build only
+  # Ubuntu and Windows work with defaults
+   link_directories(
+     ${CMAKE_BINARY_DIR}/
+     /usr/local/lib
+     /usr/lib/
+    )
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-# Build external dependancies if it is Microsoft Visual Studio build
+# Find/build external dependancies if it is Microsoft Visual Studio build
 IF(MSVC)
    find_package(Iconv REQUIRED)
    set(EXTERNAL_ICONV ${Iconv_LIBRARY})
 
    ExternalProject_Add(argp-standalone
      PREFIX ${DEPS}/argp
-     GIT_REPOSITORY https://github.com/tom42/argp-standalone.git
-     INSTALL_COMMAND ""
+     GIT_REPOSITORY https://github.com/bigcat26/argp-standalone.git
+     GIT_TAG 462cf1a13c30d36e802871a192ad90e3fd3cee98
+     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${DEPS}
    )
-   ExternalProject_Get_property(argp-standalone SOURCE_DIR)
-   set(ARGP_INCLUDE_DIRS ${SOURCE_DIR}/include/argp-standalone)
-   ExternalProject_Get_property(argp-standalone BINARY_DIR)
-   set(EXTERNAL_ARGP ${BINARY_DIR}/src/argp-standalone.lib)
 ENDIF(MSVC)
 
 # headers & library directories
@@ -110,9 +149,8 @@ if(MSVC)
     ${PNG_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}
     ${FONTCONFIG_INCLUDE_DIRS}
-    ${ARGP_INCLUDE_DIRS}
+    ${EXTERNAL_INCLUDE_DIR}
     ${DEPS_UEMF}
-    ${DEPS_MEMSTREAM}
   )
 else(MSVC)
   include_directories(
@@ -120,17 +158,12 @@ else(MSVC)
     ${PNG_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}
     ${FONTCONFIG_INCLUDE_DIRS}
+    ${EXTERNAL_INCLUDE_DIR}
     ${DEPS_UEMF}
     ${DEPS_MEMSTREAM}
     /usr/local/include 
     /usr/include 
     /sw/include
-  )
-
-  link_directories(
-    ${CMAKE_BINARY_DIR}/
-    /usr/local/lib
-    /usr/lib/
   )
 endif(MSVC)
 
@@ -181,8 +214,9 @@ target_link_libraries(emf2svg-conv
     ${EXTERNAL_ARGP}
 )
 
+  add_dependencies(emf2svg fmem)
 if(MSVC)
-  add_dependencies(emf2svg-conv argp-standalone)
+  add_dependencies(emf2svg argp-standalone)
 endif(MSVC)
 
 if(GCOV)

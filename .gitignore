@@ -50,6 +50,9 @@ emf2svg-test
 # exceptions
 !tests/resources/filesmasher-master/Makefile
 
-# external preojects
+# external projects
 vcpkg
 deps/argp
+deps/fmem
+deps/include
+deps/lib

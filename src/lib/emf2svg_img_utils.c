@@ -9,6 +9,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fmem.h>
 
 #ifdef DARWIN
 #include <memstream.h>
@@ -40,7 +41,7 @@ float get_pixel_size(uint32_t colortype) {
 }
 
 /* Attempts to save PNG to file; returns 0 on success, non-zero on error. */
-int rgb2png(RGBABitmap *bitmap, char **out, size_t *size) {
+int rgb2png(RGBABitmap *bitmap, char ** out, size_t *size) {
     FILE* fp = open_memstream(out, size);
     if (fp == NULL) {
         return -1;
