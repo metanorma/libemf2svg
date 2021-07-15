@@ -23,7 +23,7 @@ jobs:
 
     - uses: actions/cache@v2
       with:
-        path: ${{env.LOCALAPPDATA}}/vcpkg/archives
+        path: C:/Users/runneradmin/AppData/Local/vcpkg/archives
         key: ${{runner.os}}-vcpkg
      
     - name: Configure
