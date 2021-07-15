@@ -19,9 +19,12 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Wonder
+      run: echo a${{env.VCPKG_DEFAULT_BINARY_CACHE}}a
+      
     - uses: actions/cache@v2
       with:
-        path: ${{VCPKG_DEFAULT_BINARY_CACHE}}/vcpkg/archives
+        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}/vcpkg/archives
         key: ${{runner.os}}-vcpkg
      
     - name: Configure
