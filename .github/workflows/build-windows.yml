@@ -18,10 +18,13 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Wonder
+      run: echo ${{env.LOCALAPPDATA}}
+
     - uses: actions/cache@v2
       with:
         path: ${{env.LOCALAPPDATA}}/vcpkg/archives
-        key: ${{runner.os}}-vcpkg-${{hashFiles('${{github.workspace}}/vcpkg.json')}}
+        key: ${{runner.os}}-vcpkg
      
     - name: Configure
       run: >
