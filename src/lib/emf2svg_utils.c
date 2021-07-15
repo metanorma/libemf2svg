@@ -148,7 +148,7 @@ void basic_stroke(drawingStates *states, FILE *out) {
     color_stroke(states, out);
     width_stroke(states, out, states->currentDeviceContext.stroke_width);
 }
-bool checkOutOfEMF(drawingStates *states, intptr_t address) {
+bool checkOutOfEMF(drawingStates *states, uintptr_t address) {
     if (address > states->endAddress) {
         states->Error = true;
         return true;
@@ -1473,7 +1473,7 @@ void text_convert(char *in, size_t size_in, char **out, size_t *size_out,
         break;
     default:
         if (checkOutOfEMF(states,
-                          (intptr_t)((intptr_t)in + (intptr_t)size_in))) {
+                          (uintptr_t)((uintptr_t)in + (uintptr_t)size_in))) {
             string = NULL;
             return;
         }

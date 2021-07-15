@@ -22,7 +22,7 @@ jobs:
       with:
         path: ${{github.workspace}}/vcpkg
         key: ${{runner.os}}-vcpkg-${{hashFiles('${{github.workspace}}/vcpkg.json')}}
-        restore-keys: ${{runner.os}}-vcpk-
+        restore-keys: ${{runner.os}}-vcpkg-
      
     - name: Configure
       run: cmake -B ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
