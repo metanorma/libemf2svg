@@ -8,9 +8,10 @@ on:
 
 env:
   BUILD_TYPE: Release
+  VCPKG_DEFAULT_BINARY_CACHE: ${{github.workspace}}/cache
 
 jobs:
-  build-windows:
+  Windows-build:
     runs-on: windows-latest
 
     steps:
@@ -18,14 +19,20 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Create cache storage
+      run: mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+      
     - uses: actions/cache@v2
       with:
-        path: ${{github.workspace}}/vcpkg
-        key: ${{runner.os}}-vcpkg-${{hashFiles('${{github.workspace}}/vcpkg.json')}}
-        restore-keys: ${{runner.os}}-vcpkg-
+        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        key: ${{runner.os}}-vcpkg
      
     - name: Configure
-      run: cmake -B ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      run: >
+        cmake 
+        -B ${{github.workspace}} 
+        -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
+        -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}

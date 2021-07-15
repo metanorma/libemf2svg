@@ -1,7 +1,9 @@
 libemf2svg
 ==========
 
-![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build.yml/badge.svg)
+![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build-ubuntu.yml/badge.svg)
+![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build-macos.yml/badge.svg)
+![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build-windows.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/maxirmx/libemf2svg/badge.svg?branch=master)](https://coveralls.io/github/maxirmx/libemf2svg?branch=master)
 
 MS EMF (Enhanced Metafile) to SVG conversion library.
