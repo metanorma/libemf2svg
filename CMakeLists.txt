@@ -8,10 +8,11 @@ include(ExternalProject)
 #   -- freetype
 #   -- fontconfig
 #   -- iconv
-# - vcpkg is configured as git submodule. Some experts consider it the best prectice a
+# - vcpkg is configured as git submodule. Some experts consider it is the best prectice 
+#   (though other experts do not)
 # - The list of vcpkg modules is specified at vcpkg.json
-# - With this setup CMake automatically runs vcpkg install for all listed packages 
-#   before the project directive is executed
+# - With this setup and when called with -DCMAKE_TOOLCHAIN_FILE={project root}/vcpkg/scripts/buildsystems/vcpkg.cmake
+#   CMake automatically runs vcpkg install for all listed packages before the project directive is executed
 
 project (emf2svg)
 
@@ -31,25 +32,31 @@ set(DEPS ${CMAKE_CURRENT_SOURCE_DIR}/deps)
 set(EXTERNAL_INCLUDE_DIR ${DEPS}/include)
 set(EXTERNAL_LIB_DIR ${DEPS}/lib)
 
-ExternalProject_Add(fm
-  PREFIX ${DEPS}
-  GIT_REPOSITORY https://github.com/Snaipe/fmem.git
-  GIT_TAG b73b3d8b570c2f79df5a0b071efba392a82ddcd7 
-  UPDATE_COMMAND git restore ${DEPS}/src/fm/CMakeLists.txt 
-  PATCH_COMMAND cd ${DEPS}/src/fm && git apply ${DEPS}/fmem.patch/CMakeLists.txt.patch
-  CMAKE_ARGS -DBUILD_TESTING=FALSE -DCMAKE_INSTALL_PREFIX=${DEPS}
-)
-  set(EXTERNAL_FMEM "fmem")
-
-# Comments re fmem setup above
+# Comments re fmem setup
 # The patch fixes https://github.com/Snaipe/fmem/issues/4
 # However, as CMake man explains (https://cmake.org/cmake/help/latest/module/ExternalProject.html)
 # "Note that it can be quite difficult to define an appropriate patch command that performs 
 #  robustly, especially for download methods such as git where changing the GIT_TAG will not 
 #  discard changes from a previous patch, but the patch command will be called again after 
 #  updating to the new tag."
-# So with UPDATE_COMMAND we roll back the patch that may be applied during the previous build
-# in order to ensure that the patch may be applied correctly by PATH_COMMAND
+# It is true, of course, considering discussions like this:
+# https://gitlab.kitware.com/cmake/cmake/-/issues/21086
+# Basically, you cannot predict when PATCH_COMMAND is executed so we always roll back
+# the patch that may be applied during the previous build in order to ensure that 
+# the same patch may be applied correctly again
+
+# And finally a small helper for building native Windows and WSL from single source tree
+set(FMEM_NAME fm${EXTERNAL_LIB_DIR_SUFFIX})
+
+ExternalProject_Add(${FMEM_NAME}
+   PREFIX ${DEPS}
+   GIT_REPOSITORY https://github.com/Snaipe/fmem.git
+   GIT_TAG b73b3d8b570c2f79df5a0b071efba392a82ddcd7 
+   PATCH_COMMAND cd ${DEPS}/src/${FMEM_NAME} && git restore CMakeLists.txt && git apply ${DEPS}/fmem.patch/CMakeLists.txt.patch
+   CMAKE_ARGS -DBUILD_TESTING=FALSE -DCMAKE_INSTALL_PREFIX=${DEPS}
+)
+set(EXTERNAL_FMEM "fmem")
+
 
 set(DEPS_UEMF ${DEPS}/libUEMF-0.2.5)
 
@@ -123,7 +130,8 @@ if(MSVC)
   find_package(Iconv REQUIRED)
   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
 
-  ExternalProject_Add(argp
+  set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
+  ExternalProject_Add(${ARGP_NAME}
     PREFIX ${DEPS}
     GIT_REPOSITORY https://github.com/bigcat26/argp-standalone.git
     GIT_TAG 462cf1a13c30d36e802871a192ad90e3fd3cee98
@@ -206,9 +214,9 @@ target_link_libraries(emf2svg
     ${EXTERNAL_FMEM}
 ) 
 
-add_dependencies(emf2svg fm)
+add_dependencies(emf2svg ${FMEM_NAME})
 if(MSVC)
-  add_dependencies(emf2svg argp)
+  add_dependencies(emf2svg ${ARGP_NAME})
 endif(MSVC)
 
 # Compile the executable

@@ -774,8 +774,7 @@ int emf2svg(char *contents, size_t length, char ** fm_out, size_t * fm_out_lengt
 
         pEmr = (PU_ENHMETARECORD)(contents + off);
 
-        result =
-            U_emf_onerec_draw(contents, blimit, recnum, off, stream, states);
+        result = U_emf_onerec_draw(contents, blimit, recnum, off, stream, states);
         if (result == (size_t)-1 || states->Error) {
             if (states->verbose) {
                 printf(
