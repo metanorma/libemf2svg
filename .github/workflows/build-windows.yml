@@ -24,7 +24,7 @@ jobs:
       
     - uses: actions/cache@v2
       with:
-        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}/vcpkg/archives
+        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
         key: ${{runner.os}}-vcpkg
      
     - name: Configure
