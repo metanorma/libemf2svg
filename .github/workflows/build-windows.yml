@@ -19,7 +19,7 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Wonder
+    - name: Create cache storage
       run: mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
       
     - uses: actions/cache@v2
