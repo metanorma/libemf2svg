@@ -805,10 +805,11 @@ int emf2svg(char *contents, size_t length, char ** fm_out, size_t * fm_out_lengt
         void* out;
         fmem_mem(&fm, &out, fm_out_length); 
         if (*fm_out_length) {
-            *fm_out = (char*)malloc(*fm_out_length);
+            *fm_out = (char*)malloc(*fm_out_length+1);
         }
         if (*fm_out) {
             memcpy((void*)(*fm_out), out, *fm_out_length);
+            (*fm_out)[*fm_out_length] = 0;
         }
         else {
             err = 0;

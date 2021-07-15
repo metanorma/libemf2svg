@@ -138,10 +138,11 @@ int rgb2png(RGBABitmap *bitmap, char ** fm_out, size_t * fm_out_length) {
     void* out;
     fmem_mem(&fm, &out, fm_out_length);
     if (*fm_out_length) {
-        *fm_out = (char*)malloc(*fm_out_length);
+        *fm_out = (char*)malloc(*fm_out_length+1);
     }
     if (*fm_out) {
         memcpy((void*)(*fm_out), out, *fm_out_length);
+        (*fm_out)[*fm_out_length] = 0;
     }
     fclose(fp);
     fmem_term(&fm);
@@ -251,10 +252,11 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
     void* out;
     fmem_mem(&fm, &out, &out_img.size);
     if (out_img.size) {
-        out_img.pixels = (RGBPixel*)malloc(out_img.size);
+        out_img.pixels = (RGBPixel*)malloc(out_img.size+1);
     }
     if (out_img.pixels) {
         memcpy((void*)out_img.pixels, out, out_img.size);
+        ((char*)(out_img.pixels))[out_img.size] = 0;
         out_img.width = img.width;
         out_img.height = img.height;
     }
@@ -471,10 +473,11 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
     void* out;
     fmem_mem(&fm, &out, &out_img.size);
     if (out_img.size) {
-        out_img.pixels = (RGBPixel*)malloc(out_img.size);
+        out_img.pixels = (RGBPixel*)malloc(out_img.size+1);
     }
     if (out_img.pixels) {
         memcpy((void*)out_img.pixels, out, out_img.size);
+        ((char*)(out_img.pixels))[out_img.size] = 0;
         out_img.width = img.width;
         out_img.height = img.height;
     }
