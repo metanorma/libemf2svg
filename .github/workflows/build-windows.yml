@@ -24,7 +24,7 @@ jobs:
         key: ${{runner.os}}-vcpkg-${{hashFiles('${{github.workspace}}/vcpkg.json')}}
      
     - name: Configure
-      run: | 
+      run: >
         cmake 
         -B ${{github.workspace}} 
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
