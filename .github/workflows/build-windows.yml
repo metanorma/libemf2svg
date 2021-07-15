@@ -10,7 +10,7 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build-windows:
+  Windows-build:
     runs-on: windows-latest
 
     steps:
@@ -20,12 +20,15 @@ jobs:
 
     - uses: actions/cache@v2
       with:
-        path: ${{github.workspace}}/vcpkg
+        path: ${{env.LOCALAPPDATA}}/vcpkg/archives
         key: ${{runner.os}}-vcpkg-${{hashFiles('${{github.workspace}}/vcpkg.json')}}
-        restore-keys: ${{runner.os}}-vcpkg-
      
     - name: Configure
-      run: cmake -B ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      run: | 
+        cmake 
+        -B ${{github.workspace}} 
+        -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
+        -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
