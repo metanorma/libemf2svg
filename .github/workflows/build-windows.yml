@@ -19,11 +19,11 @@ jobs:
         submodules: recursive
 
     - name: Wonder
-      run: echo ${{env.LOCALAPPDATA}}
+      run: echo %LOCALAPPDATA%
 
     - uses: actions/cache@v2
       with:
-        path: ${{env.LOCALAPPDATA}}/vcpkg/archives
+        path: %LOCALAPPDATA%/vcpkg/archives
         key: ${{runner.os}}-vcpkg
      
     - name: Configure
