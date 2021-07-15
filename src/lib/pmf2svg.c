@@ -1691,8 +1691,8 @@ int U_PMR_OBJECT_draw(const char *contents, const char *blimit,
         U_PMF_OBJECTTYPEENUMERATION_draw(otype, out, states);
         if (ntype) {
             if (checkOutOfEMF(states,
-                              (uintptr_t)((uintptr_t)Data +
-                                         (uintptr_t)Header.DataSize - 4)) ||
+                              (intptr_t)((intptr_t)Data +
+                                         (intptr_t)Header.DataSize - 4)) ||
                 ((int64_t)Header.DataSize - 4) < 0) {
                 status = 0;
             } else {
@@ -1702,7 +1702,7 @@ int U_PMR_OBJECT_draw(const char *contents, const char *blimit,
             }
         } else {
             if (checkOutOfEMF(states,
-                              (uintptr_t)Data + (uintptr_t)Header.DataSize)) {
+                              (intptr_t)Data + (intptr_t)Header.DataSize)) {
                 status = 0;
             } else {
                 U_OA_append(
