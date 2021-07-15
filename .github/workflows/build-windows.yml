@@ -8,6 +8,7 @@ on:
 
 env:
   BUILD_TYPE: Release
+  VCPKG_DEFAULT_BINARY_CACHE: ${{github.workspace}}/cache
 
 jobs:
   Windows-build:
@@ -19,11 +20,11 @@ jobs:
         submodules: recursive
 
     - name: Wonder
-      run: echo a${{env.LOCALAPPDATA}}a
+      run: echo a${{VCPKG_DEFAULT_BINARY_CACHE}}a
 
     - uses: actions/cache@v2
       with:
-        path: C:/Users/runneradmin/AppData/Local/vcpkg/archives
+        path: ${{VCPKG_DEFAULT_BINARY_CACHE}}/vcpkg/archives
         key: ${{runner.os}}-vcpkg
      
     - name: Configure
