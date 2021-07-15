@@ -19,7 +19,7 @@ jobs:
         submodules: recursive
 
     - name: Wonder
-      run: echo %LOCALAPPDATA%
+      run: echo xxx
 
     - uses: actions/cache@v2
       with:
