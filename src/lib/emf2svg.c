@@ -654,6 +654,7 @@ int emf2svg(char *contents, size_t length, char ** fm_out, size_t * fm_out_lengt
     char *blimit;
     FILE *stream;
     fmem fm;
+    fmem_init(&fm);
     *fm_out = NULL;
     *fm_out_length = 0;
 
@@ -801,8 +802,19 @@ int emf2svg(char *contents, size_t length, char ** fm_out, size_t * fm_out_lengt
 
     if (stream) {
         fflush(stream);
-        fmem_mem(&fm, fm_out, fm_out_length); 
+        void* out;
+        fmem_mem(&fm, &out, fm_out_length); 
+        if (*fm_out_length) {
+            *fm_out = (char*)malloc(*fm_out_length);
+        }
+        if (*fm_out) {
+            memcpy((void*)(*fm_out), out, *fm_out_length);
+        }
+        else {
+            err = 0;
+        }
         fclose(stream);
+        fmem_term(&fm);
     }
 
     return err;
