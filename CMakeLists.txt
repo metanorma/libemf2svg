@@ -31,16 +31,15 @@ set(DEPS ${CMAKE_CURRENT_SOURCE_DIR}/deps)
 set(EXTERNAL_INCLUDE_DIR ${DEPS}/include)
 set(EXTERNAL_LIB_DIR ${DEPS}/lib)
 
-
-
-ExternalProject_Add(fmem
-  PREFIX ${DEPS}/fmem
+ExternalProject_Add(fm
+  PREFIX ${DEPS}
   GIT_REPOSITORY https://github.com/Snaipe/fmem.git
   GIT_TAG b73b3d8b570c2f79df5a0b071efba392a82ddcd7 
-  UPDATE_COMMAND git restore ${DEPS}/fmem/src/fmem/CMakeLists.txt 
-  PATCH_COMMAND cd ${DEPS}/fmem/src/fmem && git apply ${DEPS}/fmem.patch/CMakeLists.txt.patch || echo patch
+  UPDATE_COMMAND git restore ${DEPS}/src/fm/CMakeLists.txt 
+  PATCH_COMMAND cd ${DEPS}/src/fm && git apply ${DEPS}/fmem.patch/CMakeLists.txt.patch
   CMAKE_ARGS -DBUILD_TESTING=FALSE -DCMAKE_INSTALL_PREFIX=${DEPS}
 )
+  set(EXTERNAL_FMEM "fmem")
 
 # Comments re fmem setup above
 # The patch fixes https://github.com/Snaipe/fmem/issues/4
@@ -51,20 +50,17 @@ ExternalProject_Add(fmem
 #  updating to the new tag."
 # So with UPDATE_COMMAND we roll back the patch that may be applied during the previous build
 # in order to ensure that the patch may be applied correctly by PATH_COMMAND
-set(DEPS_UEMF ${DEPS}/libUEMF-0.2.5)
-set(DEPS_MEMSTREAM ${DEPS}/memstream-0.1)
 
+set(DEPS_UEMF ${DEPS}/libUEMF-0.2.5)
 
 add_custom_target(tag
     COMMAND git tag -a ${emf2svg_VERSION} -m "tagging version ${emf2svg_VERSION}"
     COMMAND git push origin ${emf2svg_VERSION}
 )
 
-
 # set version as a definition
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DE2S_VERSION='\"${emf2svg_VERSION}\"'")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DE2S_VERSION=${emf2svg_VERSION}")
-
 
 # Options
 option(GCOV      "compile with gcov support"    OFF)
@@ -88,6 +84,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od -Zi")
   else(MSVC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g")
+    set(CMAKE_MODULE_LINKER_FLAGS "-INCREMENTAL:NO")
   endif(MSVC)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
@@ -119,28 +116,21 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    set(EXTERNAL_ICONV "iconv")
    set(EXTERNAL_ARGP "argp")
    add_definitions(-DDARWIN)
-
-  # Link directories are required for MacOS GHA build only
-  # Ubuntu and Windows work with defaults
-   link_directories(
-     ${CMAKE_BINARY_DIR}/
-     /usr/local/lib
-     /usr/lib/
-    )
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 # Find/build external dependancies if it is Microsoft Visual Studio build
-IF(MSVC)
-   find_package(Iconv REQUIRED)
-   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
+if(MSVC)
+  find_package(Iconv REQUIRED)
+  set(EXTERNAL_ICONV ${Iconv_LIBRARY})
 
-   ExternalProject_Add(argp-standalone
-     PREFIX ${DEPS}/argp
-     GIT_REPOSITORY https://github.com/bigcat26/argp-standalone.git
-     GIT_TAG 462cf1a13c30d36e802871a192ad90e3fd3cee98
-     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${DEPS}
-   )
-ENDIF(MSVC)
+  ExternalProject_Add(argp
+    PREFIX ${DEPS}
+    GIT_REPOSITORY https://github.com/bigcat26/argp-standalone.git
+    GIT_TAG 462cf1a13c30d36e802871a192ad90e3fd3cee98
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${DEPS}
+  )
+  set(EXTERNAL_ARGP "argp-standalone")
+endif(MSVC)
 
 # headers & library directories
 if(MSVC)
@@ -152,6 +142,10 @@ if(MSVC)
     ${EXTERNAL_INCLUDE_DIR}
     ${DEPS_UEMF}
   )
+  link_directories(
+    ${CMAKE_BINARY_DIR}
+    ${EXTERNAL_LIB_DIR}
+  )
 else(MSVC)
   include_directories(
     ./inc
@@ -160,10 +154,15 @@ else(MSVC)
     ${FONTCONFIG_INCLUDE_DIRS}
     ${EXTERNAL_INCLUDE_DIR}
     ${DEPS_UEMF}
-    ${DEPS_MEMSTREAM}
     /usr/local/include 
     /usr/include 
     /sw/include
+  )
+  link_directories(
+    ${CMAKE_BINARY_DIR}
+    ${EXTERNAL_LIB_DIR}
+    /usr/local/lib
+    /usr/lib/
   )
 endif(MSVC)
 
@@ -176,7 +175,6 @@ add_library(emf2svg
     ${DEPS_UEMF}/uemf_endian.c
     ${DEPS_UEMF}/uemf.c
     ${DEPS_UEMF}/upmf.c
-#    ${DEPS_MEMSTREAM}/memstream.c
     src/lib/emf2svg_utils.c
     src/lib/emf2svg_img_utils.c
     src/lib/emf2svg_clip_utils.c
@@ -200,24 +198,26 @@ set_target_properties(emf2svg
     SOVERSION ${emf2svg_VERSION_MAJOR}
 )
 
-# Compile the executable
-add_executable(emf2svg-conv src/conv/emf2svg.cpp)
 target_link_libraries(emf2svg
     ${PNG_LIBRARIES}
     ${EXTERNAL_ICONV}
     ${FREETYPE_LIBRARIES}
     ${FONTCONFIG_LIBRARIES}
+    ${EXTERNAL_FMEM}
 ) 
+
+add_dependencies(emf2svg fm)
+if(MSVC)
+  add_dependencies(emf2svg argp)
+endif(MSVC)
+
+# Compile the executable
+add_executable(emf2svg-conv src/conv/emf2svg.cpp)
 
 target_link_libraries(emf2svg-conv
     emf2svg
     ${EXTERNAL_ARGP}
 )
-
-  add_dependencies(emf2svg fmem)
-if(MSVC)
-  add_dependencies(emf2svg argp-standalone)
-endif(MSVC)
 
 if(GCOV)
   Set(COVERAGE_EXCLUDES '*conv*' '*uemf*' '*upmf*' '*tests*' '*c++*')

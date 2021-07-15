@@ -11,9 +11,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef DARWIN
-#include "memstream.c"
-#endif
+#include <fmem.h>
 
 int U_emf_onerec_is_emfp(const char *contents, const char *blimit, int recnum,
                          size_t off, bool *ret) {
@@ -646,7 +644,7 @@ int U_emf_onerec_draw(const char *contents, const char *blimit, int recnum,
     return (size);
 }
 
-int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
+int emf2svg(char *contents, size_t length, char ** fm_out, size_t * fm_out_length,
             generatorOptions *options) {
     size_t off = 0;
     size_t result;
@@ -655,6 +653,9 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
     PU_ENHMETARECORD pEmr;
     char *blimit;
     FILE *stream;
+    fmem fm;
+    *fm_out = NULL;
+    *fm_out_length = 0;
 
 #if U_BYTE_SWAP
     // This is a Big Endian machine, EMF data is Little Endian
@@ -690,7 +691,7 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
     blimit = contents + length;
     int err = 1;
 
-    stream = open_memstream(out, out_length);
+    stream = fmem_open(&fm, "w");
     if (stream == NULL) {
         if (states->verbose) {
             printf("Failed to allocate output stream\n");
@@ -800,6 +801,7 @@ int emf2svg(char *contents, size_t length, char **out, size_t *out_length,
 
     if (stream) {
         fflush(stream);
+        fmem_mem(&fm, fm_out, fm_out_length); 
         fclose(stream);
     }
 

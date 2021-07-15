@@ -10,11 +10,6 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <fmem.h>
-
-#ifdef DARWIN
-#include <memstream.h>
-#endif
-
 #include <png.h>
 
 RGBAPixel *pixel_at(RGBABitmap *bitmap, int x, int y) {
@@ -41,8 +36,11 @@ float get_pixel_size(uint32_t colortype) {
 }
 
 /* Attempts to save PNG to file; returns 0 on success, non-zero on error. */
-int rgb2png(RGBABitmap *bitmap, char ** out, size_t *size) {
-    FILE* fp = open_memstream(out, size);
+int rgb2png(RGBABitmap *bitmap, char ** fm_out, size_t * fm_out_length) {
+    fmem fm;
+    *fm_out = NULL;
+    *fm_out_length = 0;
+    FILE* fp = fmem_open(&fm, "w");
     if (fp == NULL) {
         return -1;
     }
@@ -53,9 +51,6 @@ int rgb2png(RGBABitmap *bitmap, char ** out, size_t *size) {
     // png_uint_32 bytes_per_row;
     png_byte **row_pointers = NULL;
     bool alpha_channel_empty = true;
-
-    if (fp == NULL)
-        return -1;
 
     /* Initialize the write struct. */
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -139,6 +134,7 @@ int rgb2png(RGBABitmap *bitmap, char ** out, size_t *size) {
     /* Finish writing. */
     png_destroy_write_struct(&png_ptr, &info_ptr);
     fflush(fp);
+    fmem_mem(&fm, fm_out, fm_out_length);
     fclose(fp);
     return 0;
 }
@@ -147,8 +143,7 @@ int rgb2png(RGBABitmap *bitmap, char ** out, size_t *size) {
 RGBBitmap rle8ToRGB8(RGBBitmap img) {
     FILE *stream;
     bool decode = true;
-    char *out = NULL;
-    size_t size = 0;
+    fmem fm;
 
     RGBBitmap out_img;
     out_img.size = 0;
@@ -167,7 +162,7 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         return out_img;
     }
 
-    stream = open_memstream(&out, &size);
+    stream = fmem_open(&fm, "w");
     if (stream == NULL) {
         return out_img;
     }
@@ -177,7 +172,6 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         // check against potential overflow
         if ((bm + 2) > end || x > MAX_BMP_WIDTH || y > MAX_BMP_HEIGHT) {
             fclose(stream);
-            if (out) free(out);
             return out_img;
         };
         switch (bm[0]) {
@@ -199,7 +193,6 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
                 // offset handling, pad with (off.x + off.y * width) zeros
                 if ((bm + 3) > end) {
                     fclose(stream);
-                    free(out);
                     return out_img;
                 };
                 for (int i = 0; i < (bm[2] + img.width * bm[3]); i++)
@@ -216,7 +209,6 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
                 bm_next = bm + 1 + ((bm[1] + 1) / 2) * 2;
                 if (bm_next > end) {
                     fclose(stream);
-                    free(out);
                     return out_img;
                 };
                 for (int i = 2; i < bm[1] + 2; i++)
@@ -243,9 +235,8 @@ RGBBitmap rle8ToRGB8(RGBBitmap img) {
         fputc(0x00, stream);
 
     fflush(stream);
+    fmem_mem(&fm, &out_img.pixels, &out_img.size);
     fclose(stream);
-    out_img.pixels = (RGBPixel *)out;
-    out_img.size = size;
     out_img.width = img.width;
     out_img.height = img.height;
     return out_img;
@@ -294,8 +285,7 @@ int e2s_get_DIB_params(PU_BITMAPINFO Bmi, const U_RGBQUAD **ct, uint32_t *numCt,
 RGBBitmap rle4ToRGB(RGBBitmap img) {
     FILE *stream;
     bool decode = true;
-    char *out = NULL;
-    size_t size = 0;
+    fmem fm;
 
     RGBBitmap out_img;
     out_img.size = 0;
@@ -314,7 +304,7 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         return out_img;
     }
 
-    stream = open_memstream(&out, &size);
+    stream = fmem_open(&fm, "w");
     if (stream == NULL) {
         return out_img;
     }
@@ -336,7 +326,6 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         // check against potential overflow
         if ((bm + 2) > end || x > MAX_BMP_WIDTH || y > MAX_BMP_HEIGHT) {
             fclose(stream);
-            if (out) free(out);
             return out_img;
         };
         switch (bm[0]) {
@@ -364,7 +353,6 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
                 // offset handling, pad with (off.x + off.y * width) zeros
                 if ((bm + 3) > end) {
                     fclose(stream);
-                    free(out);
                     return out_img;
                 };
 
@@ -393,7 +381,6 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
                 bm_next = bm + (bm[1] / 2) + 2;
                 if (bm_next > end) {
                     fclose(stream);
-                    free(out);
                     return out_img;
                 };
                 for (int i = 2; i < (bm[1] / 2) + 2; i++) {
@@ -455,9 +442,8 @@ RGBBitmap rle4ToRGB(RGBBitmap img) {
         fputc(0x00, stream);
 
     fflush(stream);
+    fmem_mem(&fm, &out_img.pixels, &out_img.size);
     fclose(stream);
-    out_img.pixels = (RGBPixel *)out;
-    out_img.size = size;
     out_img.width = img.width;
     out_img.height = img.height;
     return out_img;
