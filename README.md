@@ -216,6 +216,10 @@ EMF+ RECORDS:
 ChangeLogs
 ----------
 
+1.X+1.X:
+
+* add MSVC Windows native build
+
 1.X.X:
 
 * add support for EMF images without an initial viewport setup
