@@ -37,6 +37,9 @@ emf2svg-conv
 # out directory
 out
 
+# test files
+tests/resources/tmp
+
 # VS files
 .vs
 

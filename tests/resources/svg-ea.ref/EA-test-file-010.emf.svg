@@ -1,0 +1,57 @@
+<?xml version="1.0"  encoding="UTF-8" standalone="no"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g transform="translate(0.0000, 0.0000)">
+<path d="M 1.0000,1.0000 L 1.0000,375.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 1.0000,375.0000 L 619.0000,375.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 619.0000,375.0000 L 619.0000,1.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 619.0000,1.0000 L 1.0000,1.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 1.0000,21.0000 L 199.0000,21.0000 L 212.0000,7.0000 L 212.0000,1.0000 L 1.0000,1.0000 L 1.0000,21.0000 Z" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="#FFFFFF" />
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" font-weight="700" text-anchor="start" x="6.0000" y="13.0000" font-size="10.0000" ><![CDATA[class Fig: Primitives of RS using Zonal Identifiers]]></text>
+<path d="M 206.0000,292.0000 L 206.0000,332.0000 L 346.0000,332.0000 L 346.0000,304.0000 L 334.0000,292.0000 Z" stroke="#FFFFFF" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="#FFFFFF" />
+<path d="M 334.0000,292.0000 L 334.0000,304.0000 L 346.0000,304.0000 Z" stroke="#FFFFFF" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="#DCDCDC" />
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" text-anchor="start" x="211.0000" y="315.0000" font-size="10.0000" ><![CDATA[KEY:]]></text>
+<rect x="246.0000" y="274.0000" width="99.0000" height="58.0000" rx="6.0000" ry="6.0000"  fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<rect x="257.0000" y="305.0000" width="16.0000" height="16.0000"  fill="#FFFFFF" stroke="#EB8066" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Carlito" fill="#003060" style ="white-space:pre;" text-anchor="start" x="280.0000" y="315.0000" font-size="10.0000" ><![CDATA[19112 Ed 2]]></text>
+<text font-family="Carlito" fill="#003060" style ="white-space:pre;" font-weight="700" text-anchor="start" x="288.0000" y="294.4000" font-size="16.0000" ><![CDATA[ ]]></text>
+<rect x="346.0000" y="274.0000" width="93.0000" height="58.0000" rx="6.0000" ry="6.0000"  fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<rect x="357.0000" y="305.0000" width="16.0000" height="16.0000"  fill="#FFFFFF" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Carlito" fill="#003060" style ="white-space:pre;" text-anchor="start" x="380.0000" y="315.0000" font-size="10.0000" ><![CDATA[ISO 19170-1]]></text>
+<text font-family="Carlito" fill="#003060" style ="white-space:pre;" font-weight="700" text-anchor="start" x="391.0000" y="294.4000" font-size="16.0000" ><![CDATA[ ]]></text>
+<rect x="191.0000" y="118.0000" width="167.0000" height="40.0000"  fill="#FFFFFF" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Calibri" fill="#000000" style ="white-space:pre;" font-weight="400" text-anchor="start" x="252.0000" y="132.0000" font-size="10.0000" ><![CDATA[«interface»]]></text>
+<text font-family="Calibri" fill="#000000" font-style="italic" style ="white-space:pre;" font-weight="700" text-anchor="start" x="208.0000" y="145.0000" font-size="10.0000" ><![CDATA[RSUsingZonalIdentifiersPrimitive]]></text>
+<rect x="439.0000" y="118.0000" width="155.0000" height="40.0000"  fill="#FFFFFF" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Calibri" fill="#000000" style ="white-space:pre;" font-weight="400" text-anchor="start" x="494.0000" y="132.0000" font-size="10.0000" ><![CDATA[«interface»]]></text>
+<text font-family="Calibri" fill="#000000" font-style="italic" style ="white-space:pre;" font-weight="700" text-anchor="start" x="447.0000" y="145.0000" font-size="10.0000" ><![CDATA[RSUsingZonalIdentifiersCompound]]></text>
+<rect x="256.0000" y="36.0000" width="295.0000" height="40.0000"  fill="#FFFFFF" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Calibri" fill="#000000" style ="white-space:pre;" font-weight="400" text-anchor="start" x="381.0000" y="50.0000" font-size="10.0000" ><![CDATA[«interface»]]></text>
+<text font-family="Calibri" fill="#000000" font-style="italic" style ="white-space:pre;" font-weight="700" text-anchor="start" x="355.0000" y="63.0000" font-size="10.0000" ><![CDATA[RSUsingZonalIdentifiers]]></text>
+<rect x="25.0000" y="232.0000" width="243.0000" height="51.0000"  fill="#FFFFFF" stroke="#EA8066" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Calibri" fill="#000000" style ="white-space:pre;" font-weight="400" text-anchor="start" x="124.0000" y="246.0000" font-size="10.0000" ><![CDATA[«interface»]]></text>
+<text font-family="Calibri" fill="#000000" style ="white-space:pre;" font-weight="700" text-anchor="start" x="105.0000" y="259.0000" font-size="10.0000" ><![CDATA[ISO 19112 Edition 2::]]></text>
+<text font-family="Calibri" fill="#000000" style ="white-space:pre;" font-weight="700" text-anchor="start" x="42.0000" y="272.0000" font-size="10.0000" ><![CDATA[SpatialReferenceSystemUsingGeographicIdentifiers]]></text>
+<rect x="308.0000" y="232.0000" width="243.0000" height="51.0000"  fill="#FFFFFF" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round" />
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" text-anchor="start" x="407.0000" y="246.0000" font-size="10.0000" ><![CDATA[«interface»]]></text>
+<text font-family="Carlito" fill="#000000" font-style="italic" style ="white-space:pre;" font-weight="700" text-anchor="start" x="368.0000" y="259.0000" font-size="10.0000" ><![CDATA[Temporal RS using Identifiers::]]></text>
+<text font-family="Carlito" fill="#000000" font-style="italic" style ="white-space:pre;" font-weight="700" text-anchor="start" x="329.0000" y="272.0000" font-size="10.0000" ><![CDATA[TemporalReferenceSystemUsingPeriodIdentifiers]]></text>
+<path d="M 359.0000,137.0000 L 439.0000,137.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 429.0000,142.0000 L 439.0000,137.0000 L 429.0000,132.0000 L 419.0000,137.0000 Z" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="#FFFFFF" />
+<path d="M 272.0000,117.0000 L 272.0000,102.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 272.0000,102.0000 L 404.0000,102.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 404.0000,102.0000 L 404.0000,76.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 410.0000,92.0000 L 398.0000,92.0000 L 404.0000,76.0000 Z" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="#FFFFFF" />
+<path d="M 516.0000,117.0000 L 516.0000,102.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 516.0000,102.0000 L 404.0000,102.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 150.0000,231.0000 L 150.0000,196.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 150.0000,196.0000 L 274.0000,196.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 431.0000,231.0000 L 431.0000,197.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 431.0000,197.0000 L 274.0000,197.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 274.0000,197.0000 L 274.0000,158.0000 " stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="none" />
+<path d="M 280.0000,174.0000 L 268.0000,174.0000 L 274.0000,158.0000 Z" stroke="#000000" stroke-width="1.0000"  stroke-linecap="round"  stroke-linejoin="round"  fill="#FFFFFF" />
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" text-anchor="start" x="362.0000" y="131.0000" font-size="10.0000" ><![CDATA[+element]]></text>
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" text-anchor="start" x="362.0000" y="151.0000" font-size="10.0000" ><![CDATA[2]]></text>
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" text-anchor="start" x="378.0000" y="152.0000" font-size="10.0000" ><![CDATA[Compound]]></text>
+<text font-family="Carlito" fill="#000000" style ="white-space:pre;" text-anchor="start" x="431.0000" y="151.0000" font-size="10.0000" ><![CDATA[1]]></text>
+</g>
+</svg>
