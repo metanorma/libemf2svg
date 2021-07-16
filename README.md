@@ -30,6 +30,10 @@ Dependencies
 * libpng
 * libfontconfig
 * libfreetype
+* fmem (https://github.com/Snaipe/fmem) -- a cross-platform library for opening memory-backed libc streams
+* argp-standalone (https://github.com/bigcat26/argp-standalone) -- a standalone version of the argp argument parsing functions from glibc, Windows only
+
+fmem and argp-standalone libraries are integrated as CMake external projects.  No additional installation or handling is required.
 
 Installing the dependencies on Debian:
 
@@ -55,6 +59,9 @@ Installing the dependencies on RHEL/CentOS/Fedora:
 ```bash
 yum install cmake libpng-devel freetype-devel fontconfig-devel gcc-c++ gcc
 ```
+
+Installing the dependencies on Windows for MSVC native builds
+Dependencies are installed by vcpkg package manager. Installation is implemented as a step of CMake configuration procedure.
 
 Also note that in some rare cases, to properly handle text fields (ETO_GLYPH_INDEX flag), the ttf font
 used by the documents must be present and indexed (fontconfig) on your system.
