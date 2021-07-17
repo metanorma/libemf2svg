@@ -23,7 +23,7 @@ jobs:
 
     - name: Install packages MacOS
       run: |
-        brew install libpng
+        brew install libpng-dev
         brew install argp-standalone
         brew install coreutils
         brew install lcov
