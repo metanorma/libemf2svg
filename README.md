@@ -1,9 +1,9 @@
 libemf2svg
 ==========
 
-![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build-ubuntu.yml/badge.svg)
-![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build-macos.yml/badge.svg)
-![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/build-windows.yml/badge.svg)
+![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/ubuntu-build.yml/badge.svg)
+![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/macos-build.yml/badge.svg)
+![Build status](https://github.com/maxirmx/libemf2svg/actions/workflows/windows-build.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/maxirmx/libemf2svg/badge.svg?branch=master)](https://coveralls.io/github/maxirmx/libemf2svg?branch=master)
 
 MS EMF (Enhanced Metafile) to SVG conversion library.
@@ -216,11 +216,11 @@ EMF+ RECORDS:
 ChangeLogs
 ----------
 
-1.X+1.X:
+1.3.0:
 
 * add MSVC Windows native build
 
-1.X.X:
+1.2.0:
 
 * add support for EMF images without an initial viewport setup
 * add handling of EMF images with wrong transformation applied (Wine-generated)
