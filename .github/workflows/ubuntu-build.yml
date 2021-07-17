@@ -32,7 +32,11 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
-    - name: Compare output with reference files
+    - name: Compare output with reference files 
+      working-directory: ${{github.workspace}}
+      run: ./tests/resources/check_against_refs.sh emf svg.ref tmp
+
+    - name: Compare output with reference files (EA) 
       working-directory: ${{github.workspace}}
       run: ./tests/resources/check_against_refs.sh emf svg.ref tmp
 
