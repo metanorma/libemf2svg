@@ -23,12 +23,11 @@ jobs:
 
     - name: Install packages MacOS
       run: |
-        brew install libpng-dev
         brew install argp-standalone
         brew install coreutils
         brew install lcov
-#        brew tap LouisBrunner/valgrind
-#        brew install --HEAD LouisBrunner/valgrind/valgrind
+        brew tap LouisBrunner/valgrind
+        brew install --HEAD LouisBrunner/valgrind/valgrind
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
