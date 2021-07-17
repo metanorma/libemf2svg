@@ -38,7 +38,7 @@ jobs:
 
     - name: Compare output with reference files (EA) 
       working-directory: ${{github.workspace}}
-      run: ./tests/resources/check_against_refs.sh emf svg.ref tmp
+      run: ./tests/resources/check_against_refs.sh emf-ea svg-ea.ref tmp
 
     - name: Test well formed files
       working-directory: ${{github.workspace}}
