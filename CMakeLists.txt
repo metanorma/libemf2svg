@@ -34,12 +34,6 @@ set(EXTERNAL_LIB_DIR ${DEPS}/lib)
 
 # Comments re fmem setup
 # The patch fixes https://github.com/Snaipe/fmem/issues/4
-# However, as CMake man explains (https://cmake.org/cmake/help/latest/module/ExternalProject.html)
-# "Note that it can be quite difficult to define an appropriate patch command that performs 
-#  robustly, especially for download methods such as git where changing the GIT_TAG will not 
-#  discard changes from a previous patch, but the patch command will be called again after 
-#  updating to the new tag."
-# It is true, of course, considering discussions like this:
 # https://gitlab.kitware.com/cmake/cmake/-/issues/21086
 # Basically, you cannot predict when PATCH_COMMAND is executed so we always roll back
 # the patch that may be applied during the previous build in order to ensure that 
@@ -247,7 +241,7 @@ if(UNITTEST)
 endif(UNITTEST)
 
 if (MSVC)
-# x64: suppress mostly harmless warnings about 64 to 32 bit conversion (4244, 4267).
+# x64: suppress mostly harmless warnings about 64 to 32 bit conversion (4244, 4267, 4305).
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std:c++14 -W3 -D_CRT_SECURE_NO_WARNINGS -wd4244 -wd4267 -wd4305")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std:c11 -W3 -D_CRT_SECURE_NO_WARNINGS -wd4244 -wd4267 -wd4305")
 else(MSVC)
