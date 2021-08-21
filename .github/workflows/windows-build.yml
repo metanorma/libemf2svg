@@ -13,6 +13,9 @@ on:
 env:
   BUILD_TYPE: Release
   VCPKG_DEFAULT_BINARY_CACHE: ${{github.workspace}}/cache
+# This is vcpkg version from git submodule
+# TODO: automate the ref
+  VCPKG_TAG: 025ec564
 
 jobs:
   Windows-build:
@@ -29,7 +32,7 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
-        key: ${{runner.os}}-vcpkg
+        key: ${{runner.os}}-vcpkg-${{env.VCPKG_TAG}}
      
     - name: Configure
       run: >
