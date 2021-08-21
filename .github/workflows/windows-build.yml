@@ -13,9 +13,6 @@ on:
 env:
   BUILD_TYPE: Release
   VCPKG_DEFAULT_BINARY_CACHE: ${{github.workspace}}/cache
-# This is vcpkg version from git submodule
-# TODO: automate the ref
-  VCPKG_TAG: 025ec564
 
 jobs:
   Windows-build:
@@ -27,12 +24,16 @@ jobs:
         submodules: recursive
 
     - name: Create cache storage
-      run: mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+      run: |
+        mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        git submodule status > sm.txt
+# Something like " 025e564979cc01d0fbc5c920aa8a36635efb01bb vcpkg (2020.04-3294-g025e56497)"
+# to be used as cache key
       
     - uses: actions/cache@v2
       with:
         path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
-        key: ${{runner.os}}-vcpkg-${{env.VCPKG_TAG}}
+        key: ${{runner.os}}-vcpkg-${{ hashFiles('sm.txt') }}
      
     - name: Configure
       run: >
