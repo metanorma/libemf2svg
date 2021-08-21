@@ -23,7 +23,7 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Create cache storage
+    - name: Create cache storage and cache key
       run: |
         mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
         git submodule status > sm.txt
