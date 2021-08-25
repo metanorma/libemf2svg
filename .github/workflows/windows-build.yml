@@ -22,24 +22,24 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Create cache storage and cache key
-      run: |
-        mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
-        git submodule status > sm.txt
-# Something like " 025e564979cc01d0fbc5c920aa8a36635efb01bb vcpkg (2020.04-3294-g025e56497)"
-# to be used as cache key
+    # - name: Create cache storage and cache key
+      # run: |
+        # mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        # git submodule status > sm.txt
+# # Something like " 025e564979cc01d0fbc5c920aa8a36635efb01bb vcpkg (2020.04-3294-g025e56497)"
+# # to be used as cache key
       
-    - uses: actions/cache@v2
-      with:
-        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
-        key: ${{runner.os}}-vcpkg-${{ hashFiles('sm.txt') }}
-     
+    # - uses: actions/cache@v2
+      # with:
+        # path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        # key: ${{runner.os}}-vcpkg-${{ hashFiles('sm.txt') }}
+
     - name: Configure
       run: >
         cmake 
         -B ${{github.workspace}} 
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
-        -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
+        -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
