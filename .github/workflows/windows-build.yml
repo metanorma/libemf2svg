@@ -39,7 +39,7 @@ jobs:
         cmake 
         -B ${{github.workspace}} 
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
-        -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
+        "-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake"
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
