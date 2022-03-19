@@ -37,7 +37,7 @@ jobs:
     - name: Install packages
       run: |
         sudo apt-get update
-        sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu gperf
+        sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu gperf qemu-user
 
     - name: Configure CMake
       run: |
@@ -48,6 +48,9 @@ jobs:
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+    - name: Smoke test
+      run: qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv --version
 
 #    - name: Test well formed files
 #      working-directory: ${{github.workspace}}
