@@ -16,17 +16,24 @@ include(ExternalProject)
 
 project (emf2svg)
 
-# Project version (sematic versionning)
 set(emf2svg_VERSION_MAJOR 1)
-set(emf2svg_VERSION_MINOR 3)
-set(emf2svg_VERSION_PATCH 1)
+set(emf2svg_VERSION_MINOR 4)
+set(emf2svg_VERSION_PATCH 0)
 set(emf2svg_VERSION ${emf2svg_VERSION_MAJOR}.${emf2svg_VERSION_MINOR}.${emf2svg_VERSION_PATCH})
 
+if(PLATFORM_TOOLCHAIN)
+  set(PLATFORM_TOOLCHAIN ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PLATFORM_TOOLCHAIN}.cmake)
+  set(PLATFORM_TOOLCHAIN_OPTION -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_TOOLCHAIN}})
+  include(${PLATFORM_TOOLCHAIN})
+endif(PLATFORM_TOOLCHAIN)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+
 
 find_package(PNG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
+find_package(LibXml2 REQUIRED)
 
 set(DEPS ${CMAKE_CURRENT_SOURCE_DIR}/deps)
 set(EXTERNAL_INCLUDE_DIR ${DEPS}/include)
@@ -44,15 +51,14 @@ set(FMEM_NAME fm${EXTERNAL_LIB_DIR_SUFFIX})
 
 ExternalProject_Add(${FMEM_NAME}
    PREFIX ${DEPS}
-   GIT_REPOSITORY https://github.com/Snaipe/fmem.git
-   GIT_TAG b73b3d8b570c2f79df5a0b071efba392a82ddcd7 
-   PATCH_COMMAND cd ${DEPS}/src/${FMEM_NAME} && git restore CMakeLists.txt && git apply ${DEPS}/fmem.patch/CMakeLists.txt.patch
-   CMAKE_ARGS -DBUILD_TESTING=FALSE -DCMAKE_INSTALL_PREFIX=${DEPS}
+   GIT_REPOSITORY https://github.com/tamatebako/fmem.git
+   GIT_TAG bdce2760f0190253600f11984220fc0a007742c8
+   CMAKE_ARGS -DBUILD_TESTING=FALSE -DCMAKE_INSTALL_PREFIX=${DEPS} -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_TOOLCHAIN}
 )
 set(EXTERNAL_FMEM "fmem")
 
 
-set(DEPS_UEMF ${DEPS}/libUEMF-0.2.5)
+set(DEPS_UEMF libUEMF-0.2.5)
 
 add_custom_target(tag
     COMMAND git tag -a ${emf2svg_VERSION} -m "tagging version ${emf2svg_VERSION}"
@@ -164,8 +170,6 @@ else(MSVC)
   link_directories(
     ${CMAKE_BINARY_DIR}
     ${EXTERNAL_LIB_DIR}
-    /usr/local/lib
-    /usr/lib/
   )
 endif(MSVC)
 
@@ -206,6 +210,7 @@ target_link_libraries(emf2svg
     ${EXTERNAL_ICONV}
     ${FREETYPE_LIBRARIES}
     ${FONTCONFIG_LIBRARIES}
+    ${EXPAT_LIBRARY_RELEASE}
     ${EXTERNAL_FMEM}
 ) 
 
