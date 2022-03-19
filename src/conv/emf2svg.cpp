@@ -26,7 +26,8 @@
 
 using namespace std;
 
-#define __STRINGIFY__(V) #V
+#define __STRINGIFY__(V) __STR__(V)
+#define __STR__(V) #V
 
 const char *argp_program_version = __STRINGIFY__(E2S_VERSION);
 
