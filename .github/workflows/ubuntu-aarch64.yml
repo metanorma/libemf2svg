@@ -51,8 +51,9 @@ jobs:
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
     - name: Smoke test
+#      continue-on-error: true
       run: |
-        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}emf2svg-conv \
+        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv \
                      -i ${{github.workspace}}/tests/resources/emf/test-000.emf -o test-000.svg
 
 #        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv --version
