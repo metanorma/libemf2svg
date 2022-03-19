@@ -40,6 +40,7 @@ find_package(LibXml2 REQUIRED)
 set(DEPS ${CMAKE_CURRENT_SOURCE_DIR}/deps)
 set(EXTERNAL_INCLUDE_DIR ${DEPS}/include)
 set(EXTERNAL_LIB_DIR ${DEPS}/lib)
+set(PATCHES ${CMAKE_CURRENT_SOURCE_DIR}/patches)
 
 # Comments re fmem setup
 # The patch fixes https://github.com/Snaipe/fmem/issues/4
@@ -138,7 +139,7 @@ if(MSVC)
     GIT_REPOSITORY https://github.com/tom42/argp-standalone.git
     GIT_TAG 238d83d6fb4fbdbb3e0893f51698d8d54696bfb0
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${DEPS}
-    PATCH_COMMAND cd ${DEPS}/src/${ARGP_NAME} && git restore CMakeLists.txt && git apply ${DEPS}/argp.patch/CMakeLists.txt.patch
+    PATCH_COMMAND cd ${DEPS}/src/${ARGP_NAME} && git restore CMakeLists.txt && git apply ${PATCHES}/argp/CMakeLists.txt.patch
   )
   set(EXTERNAL_ARGP "argp-standalone")
 endif(MSVC)
