@@ -52,6 +52,6 @@ jobs:
 
     - name: Smoke test
       run: |
-        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv --version
+#        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv --version
         qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}emf2svg-conv \
                      -i ${{github.workspace}}/tests/resources/emf/test-000.emf -o test-000.svg
