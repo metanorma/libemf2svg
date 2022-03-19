@@ -15,19 +15,33 @@ jobs:
   Ubuntu-build:
     runs-on: ubuntu-latest
 
-    steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-    - name: Install packages Ubuntu
+    - name: Create cache storage and cache key
+      run: |
+        mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        git submodule status > sm.txt
+# Something like " 025e564979cc01d0fbc5c920aa8a36635efb01bb vcpkg (2020.04-3294-g025e56497)"
+# to be used as cache key
+      
+    - uses: actions/cache@v2
+      with:
+        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        key: ${{runner.os}}-vcpkg-${{ hashFiles('sm.txt') }}
+
+    - name: Install packages
       run: |
         sudo apt-get update
         sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}
-                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-                 -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
-                 -DVCPKG_TARGET_TRIPLET=arm64-linux
+      run: >
+        cmake -B ${{github.workspace}}
+              -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+              -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+              -DVCPKG_TARGET_TRIPLET=arm64-linux
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
