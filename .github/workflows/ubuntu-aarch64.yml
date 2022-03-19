@@ -1,9 +1,10 @@
-name: Ubuntu build
+name: Ubuntu-aarch64 build
 
 on:
   push:
     branches:
     - master
+    - aarch64
   pull_request:
 
 env:
