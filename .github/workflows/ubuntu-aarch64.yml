@@ -2,12 +2,13 @@ name: Ubuntu-aarch64 build
 
 on:
   push:
-    branches: [ master, aarch64 ]
+    branches: [ master ]
     paths-ignore:
       - '.github/workflows/ubuntu-build.yml'
       - '.github/workflows/macos-build.yml'
       - '.github/workflows/windows-build.yml'
   pull_request:
+  workflow_dispatch:
 
 env:
   BUILD_TYPE: Release
