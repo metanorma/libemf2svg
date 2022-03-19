@@ -27,8 +27,6 @@ jobs:
       run: |
         mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
         git submodule status > sm.txt
-# Something like " 025e564979cc01d0fbc5c920aa8a36635efb01bb vcpkg (2020.04-3294-g025e56497)"
-# to be used as cache key
 
     - uses: actions/cache@v2
       with:
@@ -51,9 +49,9 @@ jobs:
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
     - name: Smoke test
-#      continue-on-error: true
       run: |
+        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv --version
         qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv \
                      -i ${{github.workspace}}/tests/resources/emf/test-000.emf -o test-000.svg
+         ls | grep test-001.svg
 
-#        qemu-aarch64 -L /usr/aarch64-linux-gnu ${{github.workspace}}/emf2svg-conv --version
