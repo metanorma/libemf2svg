@@ -2,13 +2,13 @@ cmake_minimum_required (VERSION 3.12)
 include(ExternalProject)
 
 # Comments re MSVC build
-# - We use vcpkg to install MSVC versions of the following GNU libraries 
+# - We use vcpkg to install MSVC versions of the following GNU libraries
 #   and their dependencies:
 #   -- libpng
 #   -- freetype
 #   -- fontconfig
 #   -- iconv
-# - vcpkg is configured as git submodule. Some experts consider it is the best prectice 
+# - vcpkg is configured as git submodule. Some experts consider it is the best prectice
 #   (though other experts do not)
 # - The list of vcpkg modules is specified at vcpkg.json
 # - With this setup and when called with -DCMAKE_TOOLCHAIN_FILE={project root}/vcpkg/scripts/buildsystems/vcpkg.cmake
@@ -46,7 +46,7 @@ set(PATCHES ${CMAKE_CURRENT_SOURCE_DIR}/patches)
 # The patch fixes https://github.com/Snaipe/fmem/issues/4
 # https://gitlab.kitware.com/cmake/cmake/-/issues/21086
 # Basically, you cannot predict when PATCH_COMMAND is executed so we always roll back
-# the patch that may be applied during the previous build in order to ensure that 
+# the patch that may be applied during the previous build in order to ensure that
 # the same patch may be applied correctly again
 
 # And finally a small helper for building native Windows and WSL from single source tree
@@ -126,7 +126,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     COMMAND brew --prefix
       RESULT_VARIABLE BREW_PREFIX_RES
       OUTPUT_VARIABLE BREW_PREFIX
-      OUTPUT_STRIP_TRAILING_WHITESPACE  
+      OUTPUT_STRIP_TRAILING_WHITESPACE
     )
   if(NOT (BREW_PREFIX_RES EQUAL 0))
       message(FATAL_ERROR "Could not find brew setup")
@@ -175,8 +175,8 @@ else(MSVC)
     ${FONTCONFIG_INCLUDE_DIRS}
     ${EXTERNAL_INCLUDE_DIR}
     ${DEPS_UEMF}
-    /usr/local/include 
-    /usr/include 
+    /usr/local/include
+    /usr/include
     /sw/include
   )
   link_directories(
@@ -212,9 +212,9 @@ add_library(emf2svg
     src/lib/emf2svg.c
 )
 
-set_target_properties(emf2svg 
-    PROPERTIES 
-    VERSION ${emf2svg_VERSION} 
+set_target_properties(emf2svg
+    PROPERTIES
+    VERSION ${emf2svg_VERSION}
     SOVERSION ${emf2svg_VERSION_MAJOR}
 )
 
@@ -225,7 +225,7 @@ target_link_libraries(emf2svg
     ${FONTCONFIG_LIBRARIES}
     ${EXPAT_LIBRARY_RELEASE}
     ${EXTERNAL_FMEM}
-) 
+)
 
 add_dependencies(emf2svg ${FMEM_NAME})
 if(MSVC)
