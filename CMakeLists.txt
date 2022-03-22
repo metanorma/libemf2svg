@@ -156,7 +156,7 @@ if(MSVC)
 endif(MSVC)
 
 if(HAVE_ARGP_PARSE_FUNCTION)
-  message(STATUS "Using bundled argp");
+  message(STATUS "Using bundled argp")
 else(HAVE_ARGP_PARSE_FUNCTION)
   if(MSVC)
     message(STATUS "Building argp")
