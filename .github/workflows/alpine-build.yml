@@ -27,8 +27,9 @@ jobs:
 
     - name: Install packages
       run: |
-        apk --no-cache --upgrade add build-base clang cmake libxml2-dev \
-          libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind
+        apk --no-cache --upgrade add build-base cmake libxml2-dev \
+          libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind \
+          argp-standalone
 
     - name: Configure CMake
       env:
@@ -36,7 +37,6 @@ jobs:
         CXX: g++
       run: |
         cmake -B ${{github.workspace}} \
-          -DVCPKG_TARGET_TRIPLET=x86_64-alpine-linux-musl
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
