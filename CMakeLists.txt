@@ -155,13 +155,13 @@ if(MSVC)
   )
 endif(MSVC)
 
-if(not HAVE_ARGP_PARSE_FUNCTION)
+if(NOT HAVE_ARGP_PARSE_FUNCTION)
   if(MSVC)
     set(EXTERNAL_ARGP "argp-standalone")
   else(MSVC)
     set(EXTERNAL_ARGP "argp")
   endif(MSVC)
-endif(not HAVE_ARGP_PARSE_FUNCTION)
+endif(NOT HAVE_ARGP_PARSE_FUNCTION)
 
 # headers & library directories
 if(MSVC)
