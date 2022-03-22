@@ -35,12 +35,13 @@ jobs:
       env:
         CC: gcc
         CXX: g++
-      run: |
-        cmake -B ${{github.workspace}} \
-          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+      run: |
+        cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+        pwd
+        ls -l
 
     - name: Test well formed files
       working-directory: ${{github.workspace}}
