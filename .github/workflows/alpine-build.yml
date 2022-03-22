@@ -21,15 +21,15 @@ jobs:
       image: alpine:latest
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-
     - name: Install packages
       run: |
         apk --no-cache --upgrade add build-base cmake libxml2-dev \
           libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind \
           argp-standalone
+          
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
     - name: Configure CMake
       env:
