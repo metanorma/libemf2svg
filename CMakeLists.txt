@@ -29,6 +29,8 @@ if(VCPKG_TARGET_TRIPLET)
   endif(EXISTS ${PLATFORM_TOOLCHAIN})
 endif(VCPKG_TARGET_TRIPLET)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+
 if(${VCPKG_TARGET_TRIPLET} MATCHES "-alpine-linux-")
 set(ALPINE "Alpine")
 endif(${VCPKG_TARGET_TRIPLET} MATCHES "-alpine-linux-")
@@ -143,9 +145,6 @@ if(MSVC)
   find_package(Iconv REQUIRED)
   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
 endif(MSVC)
-
-# Locate fontconfig, somehow the find_package call can't find it?
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindFontconfig.cmake)
 
 if(MSVC OR ALPINE)
   set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
