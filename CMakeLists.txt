@@ -1,4 +1,5 @@
 cmake_minimum_required (VERSION 3.12)
+include(CheckFunctionExists)
 include(ExternalProject)
 
 # Comments re MSVC build
