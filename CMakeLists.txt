@@ -138,14 +138,14 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   add_definitions(-DDARWIN)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-# Locate fontconfig
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindFontconfig.cmake)
-
 # Find/build external dependencies if it is Microsoft Visual Studio build
 if(MSVC)
   find_package(Iconv REQUIRED)
   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
 endif(MSVC)
+
+# Locate fontconfig, somehow the find_package call can't find it?
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindFontconfig.cmake)
 
 if(MSVC OR ALPINE)
   set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
@@ -158,6 +158,8 @@ if(MSVC OR ALPINE)
   )
   set(EXTERNAL_ARGP "argp-standalone")
 endif(MSVC OR ALPINE)
+
+add_compile_options(-fPIC)
 
 # headers & library directories
 if(MSVC)

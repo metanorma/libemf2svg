@@ -31,9 +31,9 @@ jobs:
           libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind
 
     - name: Configure CMake
-      # env:
-      #   CC: clang
-      #   CXX: clang++
+      env:
+        CC: gcc
+        CXX: g++
       run: |
         cmake -B ${{github.workspace}} \
           -DVCPKG_TARGET_TRIPLET=x86_64-alpine-linux-musl
