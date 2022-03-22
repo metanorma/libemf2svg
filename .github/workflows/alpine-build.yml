@@ -28,7 +28,7 @@ jobs:
     - name: Install packages
       run: |
         apk --no-cache --upgrade add build-base clang cmake libxml2-dev \
-          libxml2-utils libpng-dev freetype-dev fontconfig-dev git
+          libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind
 
     - name: Configure CMake
       # env:
