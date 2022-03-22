@@ -1,0 +1,55 @@
+name: Alpine build
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '.github/workflows/macos-build.yml'
+      - '.github/workflows/ubuntu-build.yml'
+      - '.github/workflows/ubuntu-aarch64.yml'
+      - '.github/workflows/windows-build.yml'
+  pull_request:
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  Alpine-build:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install packages
+      run: |
+        apk --no-cache --upgrade add build-base clang cmake libxml2-dev \
+          libxml2-utils libpng-dev freetype-dev fontconfig-dev git
+
+    - name: Configure CMake
+      # env:
+      #   CC: clang
+      #   CXX: clang++
+      run: |
+        cmake -B ${{github.workspace}} \
+          -DVCPKG_TARGET_TRIPLET=x86_64-alpine-linux-musl
+          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+    - name: Test well formed files
+      working-directory: ${{github.workspace}}
+      run: ./tests/resources/check_correctness.sh -r -s
+
+    - name: Test corrupted files
+      working-directory: ${{github.workspace}}
+      run: ./tests/resources/check_correctness.sh -r -s -e tests/resources/emf-corrupted/ -xN
+
+    - name: Test EA files
+      working-directory: ${{github.workspace}}
+      run: ./tests/resources/check_correctness.sh -r -s -e tests/resources/emf-ea/

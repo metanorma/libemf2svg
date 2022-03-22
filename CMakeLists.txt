@@ -29,8 +29,9 @@ if(VCPKG_TARGET_TRIPLET)
   endif(EXISTS ${PLATFORM_TOOLCHAIN})
 endif(VCPKG_TARGET_TRIPLET)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-
+if(${VCPKG_TARGET_TRIPLET} MATCHES "-alpine-linux-")
+set(ALPINE "Alpine")
+endif(${VCPKG_TARGET_TRIPLET} MATCHES "-alpine-linux-")
 
 find_package(PNG REQUIRED)
 find_package(Freetype REQUIRED)
@@ -137,11 +138,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   add_definitions(-DDARWIN)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-# Find/build external dependancies if it is Microsoft Visual Studio build
+# Locate fontconfig
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindFontconfig.cmake)
+
+# Find/build external dependencies if it is Microsoft Visual Studio build
 if(MSVC)
   find_package(Iconv REQUIRED)
   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
+endif(MSVC)
 
+if(MSVC OR ALPINE)
   set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
   ExternalProject_Add(${ARGP_NAME}
     PREFIX ${DEPS}
@@ -151,7 +157,7 @@ if(MSVC)
     PATCH_COMMAND cd ${DEPS}/src/${ARGP_NAME} && git restore CMakeLists.txt && git apply ${PATCHES}/argp/CMakeLists.txt.patch
   )
   set(EXTERNAL_ARGP "argp-standalone")
-endif(MSVC)
+endif(MSVC OR ALPINE)
 
 # headers & library directories
 if(MSVC)
@@ -228,9 +234,9 @@ target_link_libraries(emf2svg
 )
 
 add_dependencies(emf2svg ${FMEM_NAME})
-if(MSVC)
+if(MSVC OR ALPINE)
   add_dependencies(emf2svg ${ARGP_NAME})
-endif(MSVC)
+endif(MSVC OR ALPINE)
 
 # Compile the executable
 add_executable(emf2svg-conv src/conv/emf2svg.cpp)
@@ -238,6 +244,7 @@ add_executable(emf2svg-conv src/conv/emf2svg.cpp)
 target_link_libraries(emf2svg-conv
     emf2svg
     ${EXTERNAL_ARGP}
+    "fontconfig"
 )
 
 if(GCOV)

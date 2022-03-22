@@ -50,14 +50,20 @@ apt-get install cmake pkg-config
 apt-get install libpng-dev libc6-dev libfontconfig1-dev libfreetype6-dev zlib1g-dev
 ```
 
-Installing the dependencies on OS X:
+Installing the dependencies on macOS:
 ```bash
-$ brew install argp-standalone
+$ brew install argp-standalone cmake libpng freetype fontconfig gcc
 ```
 
 Installing the dependencies on RHEL/CentOS/Fedora:
 ```bash
 yum install cmake libpng-devel freetype-devel fontconfig-devel gcc-c++ gcc
+```
+
+Installing the dependencies on Alpine Linux:
+```bash
+apk --no-cache --upgrade add build-base clang cmake libxml2-dev \
+  libxml2-utils libpng-dev freetype-dev fontconfig-dev git
 ```
 
 Installing the dependencies on Windows for MSVC native builds
@@ -225,11 +231,11 @@ EMF+ RECORDS:
 ChangeLogs
 ----------
 
-1.3.1: 
+1.3.1:
 
 * add MSVC 17 (2022) support
 
-1.3.0: 
+1.3.0:
 
 * add MSVC Windows native build
 
