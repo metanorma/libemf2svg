@@ -31,10 +31,6 @@ endif(VCPKG_TARGET_TRIPLET)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
-if(${VCPKG_TARGET_TRIPLET} MATCHES "-alpine-linux-")
-set(ALPINE "Alpine")
-endif(${VCPKG_TARGET_TRIPLET} MATCHES "-alpine-linux-")
-
 find_package(PNG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
@@ -63,7 +59,6 @@ ExternalProject_Add(${FMEM_NAME}
 )
 set(EXTERNAL_FMEM "fmem")
 
-
 set(DEPS_UEMF libUEMF-0.2.5)
 
 add_custom_target(tag
@@ -81,6 +76,8 @@ option(UNITTEST  "compile unit tests"           OFF)
 option(INDEX     "print record indexes"         OFF)
 option(STATIC    "compile statically"           OFF)
 option(FORCELE   "force little endian architecture"   OFF)
+
+CHECK_FUNCTION_EXISTS(argp_parse HAVE_ARGP_PARSE_FUNCTION)
 
 if(GCOV)
   SET(UNITTEST ON)
@@ -113,6 +110,7 @@ endif(STATIC)
 
 if(UNIX)
   link_libraries(m)
+  add_compile_options(-fPIC)
 endif(UNIX)
 
 if(NOT FORCELE)
@@ -136,7 +134,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   endif()
   set(BREW_LIB_DIR ${BREW_PREFIX}/lib)
   set(EXTERNAL_ICONV "iconv")
-  set(EXTERNAL_ARGP "argp")
   add_definitions(-DDARWIN)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
@@ -146,7 +143,7 @@ if(MSVC)
   set(EXTERNAL_ICONV ${Iconv_LIBRARY})
 endif(MSVC)
 
-if(MSVC OR ALPINE)
+if(MSVC)
   set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
   ExternalProject_Add(${ARGP_NAME}
     PREFIX ${DEPS}
@@ -155,10 +152,15 @@ if(MSVC OR ALPINE)
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${DEPS}
     PATCH_COMMAND cd ${DEPS}/src/${ARGP_NAME} && git restore CMakeLists.txt && git apply ${PATCHES}/argp/CMakeLists.txt.patch
   )
-  set(EXTERNAL_ARGP "argp-standalone")
-endif(MSVC OR ALPINE)
+endif(MSVC)
 
-add_compile_options(-fPIC)
+if(not HAVE_ARGP_PARSE_FUNCTION)
+  if(MSVC)
+    set(EXTERNAL_ARGP "argp-standalone")
+  else(MSVC)
+    set(EXTERNAL_ARGP "argp")
+  endif(MSVC)
+endif(not HAVE_ARGP_PARSE_FUNCTION)
 
 # headers & library directories
 if(MSVC)
@@ -235,9 +237,9 @@ target_link_libraries(emf2svg
 )
 
 add_dependencies(emf2svg ${FMEM_NAME})
-if(MSVC OR ALPINE)
+if(MSVC)
   add_dependencies(emf2svg ${ARGP_NAME})
-endif(MSVC OR ALPINE)
+endif(MSVC)
 
 # Compile the executable
 add_executable(emf2svg-conv src/conv/emf2svg.cpp)
@@ -245,7 +247,12 @@ add_executable(emf2svg-conv src/conv/emf2svg.cpp)
 target_link_libraries(emf2svg-conv
     emf2svg
     ${EXTERNAL_ARGP}
-    "fontconfig"
+    ${PNG_LIBRARIES}
+    ${EXTERNAL_ICONV}
+    ${FREETYPE_LIBRARIES}
+    ${FONTCONFIG_LIBRARIES}
+    ${EXPAT_LIBRARY_RELEASE}
+    ${EXTERNAL_FMEM}
 )
 
 if(GCOV)
