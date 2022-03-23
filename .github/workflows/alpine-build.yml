@@ -25,7 +25,7 @@ jobs:
       run: |
         apk --no-cache --upgrade add build-base cmake libxml2-dev \
           libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind \
-          argp-standalone
+          argp-standalone font-noto-hebrew font-noto-arabic
           
     - uses: actions/checkout@v2
       with:
