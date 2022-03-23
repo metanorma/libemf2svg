@@ -26,7 +26,9 @@ jobs:
         apk --no-cache --upgrade add build-base cmake libxml2-dev \
           libxml2-utils libpng-dev freetype-dev fontconfig-dev git valgrind \
           argp-standalone font-noto-hebrew font-noto-arabic
-          
+# font-noto-hebrew font-noto-arabic -- this is required for testing only
+# [ tests/resources/emf/test-183.emf ]
+
     - uses: actions/checkout@v2
       with:
         submodules: recursive

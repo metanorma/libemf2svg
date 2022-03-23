@@ -1490,7 +1490,6 @@ void text_convert(char *in, size_t size_in, char **out, size_t *size_out,
         string = NULL;
 
     if (string == NULL) {
-        printf("**** Something went terribly wrong ****\n");
             return;
     }
 
