@@ -18,8 +18,10 @@ jobs:
 
     - name: Collect
       run: |
+        ls -l
         rm -rf libemf2svg/.git*
         rm -rf libemf2svg/vcpkg/.git*
+        ls -l
         tar cvzf libemf2svg.tar.gz libemf2svg
 
     - name: Release
