@@ -58,6 +58,7 @@ ExternalProject_Add(${FMEM_NAME}
    GIT_TAG bdce2760f0190253600f11984220fc0a007742c8
    CMAKE_ARGS -DBUILD_TESTING=FALSE 
               -DCMAKE_INSTALL_PREFIX=${DEPS} 
+              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
               ${PLATFORM_TOOLCHAIN_OPTION}
               ${CMAKE_OSX_ARCHITECTURES_OPTION}
 )
@@ -164,6 +165,7 @@ else()
     GIT_REPOSITORY https://github.com/tom42/argp-standalone.git
     GIT_TAG 238d83d6fb4fbdbb3e0893f51698d8d54696bfb0
     CMAKE_ARGS  -DCMAKE_INSTALL_PREFIX=${DEPS}
+                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                 ${PLATFORM_TOOLCHAIN_OPTION}
                 ${CMAKE_OSX_ARCHITECTURES_OPTION}
     PATCH_COMMAND cd ${DEPS}/src/${ARGP_NAME} && git restore CMakeLists.txt && git apply ${PATCHES}/argp/CMakeLists.txt.patch
