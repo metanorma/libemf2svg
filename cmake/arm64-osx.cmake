@@ -8,6 +8,7 @@ set(CMAKE_SYSTEM_PROCESSOR arm64)
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_OSX_ARCHITECTURES arm64)
+set(CMAKE_OSX_ARCHITECTURES_OPTION -DCMAKE_OSX_ARCHITECTURES=arm64)
 
 # Where to look for the target environment
 #set(CMAKE_FIND_ROOT_PATH /usr/aarch64-linux-gnu)
