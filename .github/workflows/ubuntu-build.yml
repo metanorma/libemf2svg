@@ -75,5 +75,3 @@ jobs:
           -E '.*goodies.*' \
           -E '.*tests.*' \
           --gcov-options '\-lp'
-
-

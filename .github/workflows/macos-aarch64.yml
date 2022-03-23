@@ -13,6 +13,7 @@ on:
 
 env:
   BUILD_TYPE: Release
+  VCPKG_DEFAULT_BINARY_CACHE: ${{github.workspace}}/cache
 
 jobs:
   MacOS-build:
@@ -40,5 +41,3 @@ jobs:
 
     - name: Build
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
-
-
