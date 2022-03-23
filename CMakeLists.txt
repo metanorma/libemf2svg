@@ -158,8 +158,13 @@ elseif(HAVE_EXTERNAL_ARGP_PARSE_FUNCTION)
   set(EXTERNAL_ARGP "argp")
 else()
   message(STATUS "Building argp")
-# https://www.gnu.org/software/gnulib/manual/html_node/argp_005fprogram_005fversion_005fhook.html  
-  set(EXTERNAL_ARGP "-Wl,-force_load,${DEPS}/lib/libargp-standalone.a")
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # https://www.gnu.org/software/gnulib/manual/html_node/argp_005fprogram_005fversion_005fhook.html  
+    set(EXTERNAL_ARGP "-Wl,-force_load,${DEPS}/lib/libargp-standalone.a")
+  else(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(EXTERNAL_ARGP "argp-standalone")
+  endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
   set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
   ExternalProject_Add(${ARGP_NAME}
     PREFIX ${DEPS}
