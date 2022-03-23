@@ -1,0 +1,44 @@
+name: MacOS build
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '.github/workflows/alpine-build.yml'
+      - '.github/workflows/ubuntu-build.yml'
+      - '.github/workflows/ubuntu-aarch64.yml'
+      - '.github/workflows/windows-build.yml'
+  pull_request:
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  MacOS-build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create cache storage and cache key
+      run: |
+        mkdir ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        git submodule status > sm.txt
+
+    - uses: actions/cache@v2
+      with:
+        path: ${{env.VCPKG_DEFAULT_BINARY_CACHE}}
+        key: ${{runner.os}}-vcpkg-${{ hashFiles('sm.txt') }}
+
+    - name: Configure CMake
+      run: |
+        cmake -B ${{github.workspace}}                                                              \
+              -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}                                                \
+              -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake   \
+              -DVCPKG_TARGET_TRIPLET=arm64-osx
+
+    - name: Build
+      run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
+
+
