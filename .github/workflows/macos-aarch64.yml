@@ -2,7 +2,7 @@ name: MacOS build
 
 on:
   push:
-    branches: [ master ]
+#    branches: [ master ]
     paths-ignore:
       - '.github/workflows/alpine-build.yml'
       - '.github/workflows/ubuntu-build.yml'
