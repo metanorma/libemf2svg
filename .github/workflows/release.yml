@@ -1,12 +1,14 @@
 name: release
 
 on:
-  tags: [ v* ]
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
   publish:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
