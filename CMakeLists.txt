@@ -165,7 +165,7 @@ else(HAVE_ARGP_PARSE_FUNCTION)
     message(STATUS "Using stand-alone argp")
     set(EXTERNAL_ARGP "argp")
   endif(MSVC)
-endif(NOT HAVE_ARGP_PARSE_FUNCTION)
+endif(HAVE_ARGP_PARSE_FUNCTION)
 
 # headers & library directories
 if(MSVC)
