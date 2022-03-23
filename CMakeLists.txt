@@ -158,7 +158,7 @@ elseif(HAVE_EXTERNAL_ARGP_PARSE_FUNCTION)
   set(EXTERNAL_ARGP "argp")
 else()
   message(STATUS "Building argp")
-  set(EXTERNAL_ARGP "argp-standalone")
+  set(EXTERNAL_ARGP "-Wl,--whole-archive argp-standalone -Wl,--no-whole-archive")
   set(ARGP_NAME argp${EXTERNAL_LIB_DIR_SUFFIX})
   ExternalProject_Add(${ARGP_NAME}
     PREFIX ${DEPS}
