@@ -81,10 +81,10 @@ jobs:
   build-for-ruby:
     runs-on: ubuntu-latest
     steps:
-    - name: Install packages
-      run: |
-        sudo apt-get update
-        sudo apt-get install gperf
+#    - name: Install packages
+#      run: |
+#        sudo apt-get update
+#        sudo apt-get install gperf
 
     - name: Checkout
       uses: actions/checkout@v3
