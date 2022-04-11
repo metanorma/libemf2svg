@@ -30,7 +30,7 @@ jobs:
         path-type: minimal
         msystem: mingw64
         install: git flex bison gettext-devel
-        pacboy: gperf:p cmake:p python3:p ninja:p curl:p pkgconf:p gcc:p
+        pacboy: cmake:p python3:p ninja:p curl:p pkgconf:p gcc:p
 
     - name: Checkout
       uses: actions/checkout@v3
@@ -90,7 +90,7 @@ jobs:
         path-type: minimal
         msystem: ${{ matrix.sys }}
         install: git flex bison gettext-devel
-        pacboy: gperf:p cmake:p python3:p ninja:p curl:p pkgconf:p gcc:p
+        pacboy: cmake:p python3:p ninja:p curl:p pkgconf:p gcc:p
 
     - name: Checkout
       uses: actions/checkout@v3

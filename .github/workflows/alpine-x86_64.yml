@@ -28,11 +28,11 @@ jobs:
     - name: Install packages
       run: |
         apk --no-cache --upgrade add build-base cmake git valgrind tar argp-standalone \
-          gcompat gperf flex bison gettext-dev python3 ninja zip unzip curl pkgconfig  \
+          gcompat flex bison gettext-dev python3 ninja zip unzip curl pkgconfig  \
           libxml2-utils font-noto-hebrew font-noto-arabic
 
 # vcpkg prerequisites (and VCPKG_FORCE_SYSTEM_BINARIES: 1)
-#  gcompat gperf flex bison gettext-dev python3 ninja zip unzip curl pkg-config
+#  gcompat flex bison gettext-dev python3 ninja zip unzip curl pkg-config
 # testing prerequisites
 #  libxml2-utils
 # [ tests/resources/emf/test-183.emf ] -- font-noto-hebrew font-noto-arabic
@@ -84,7 +84,7 @@ jobs:
     - name: Install packages
       run: |
         apk --no-cache --upgrade add build-base cmake git tar bash   \
-          gcompat gperf flex bison gettext-dev python3 ninja zip unzip curl pkgconfig
+          gcompat flex bison gettext-dev python3 ninja zip unzip curl pkgconfig
 
     - name: Checkout
       uses: actions/checkout@v3
