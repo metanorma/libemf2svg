@@ -231,9 +231,13 @@ EMF+ RECORDS:
 ChangeLogs
 ----------
 
+1.7.1:
+
+* added width and heigt attributes for svg even when Y-coordinates are repaired
+
 1.7.0:
 
-* refactor build scripts to facilitate better portability and ruby integration 
+* refactor build scripts to facilitate better portability and ruby integration
 
 1.6.0:
 
