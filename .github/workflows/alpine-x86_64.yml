@@ -98,7 +98,7 @@ jobs:
     - name: Configure cache
       run: |
         echo 'VCPKG_DEFAULT_BINARY_CACHE<<EOF' >> $GITHUB_ENV
-        echo "$(pwd)/cache" >> $GITHUB_ENV
+        echo "$(cd .. && pwd)/cache" >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
 
     - name: Create cache storage and cache key
