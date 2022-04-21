@@ -98,19 +98,19 @@ jobs:
     - name: Configure cache
       run: |
         echo 'VCPKG_DEFAULT_BINARY_CACHE<<EOF' >> $GITHUB_ENV
-        echo "$(cd .. && pwd)/cache" >> $GITHUB_ENV
+        echo "$(pwd)/cache" >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
 
     - name: Create cache storage and cache key
       run: |
         mkdir ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
-        git submodule status > sm.txt
+#        git submodule status > sm.txt
 
     - name: Process cache
       uses: actions/cache@v2
       with:
         path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
-        key: ${{ github.workflow }}-vcpkg-${{ hashFiles('sm.txt') }}
+        key: ${{ github.workflow }}-vcpkg-${{ hashFiles('vcpkg') }}
 
     - name: Configure CMake
       run: |
