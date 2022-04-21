@@ -144,7 +144,7 @@ void U_EMRHEADER_draw(const char *contents, FILE *out, drawingStates *states) {
         }
     // https://www.w3.org/TR/SVG2/coords.html
         if (states->fixBrokenYTransform) {
-            fprintf(out, " width=\"%.4f\" height=\"%.4f\">\n", 
+            fprintf(out, " width=\"%.4f\" height=\"%.4f\">\n",
                 states->imgWidth + 1,
                 states->imgHeight + 1);
             fprintf(out, "<%sg transform=\"translate(0.0000, 0.00 00)\">\n",
